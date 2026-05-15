@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSUT Attendance Chatbot</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="background">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+    </div>
+
+    <div class="container">
+        <!-- Login Form -->
+        <div id="login-container" class="glass-panel">
+            <h2>NSUT Portal Login</h2>
+            <p>Enter your credentials to sync attendance data.</p>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="rollno">Roll No (UserID)</label>
+                    <input type="text" id="rollno" placeholder="e.g., 2021UCA1001" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <div class="input-group">
+                    <label for="semester">Semester</label>
+                    <select id="semester" required
+                        style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.1); color: white; outline: none;">
+                        <option value="1" style="color: black;">1</option>
+                        <option value="2" style="color: black;">2</option>
+                        <option value="3" style="color: black;">3</option>
+                        <option value="4" selected style="color: black;">4</option>
+                        <option value="5" style="color: black;">5</option>
+                        <option value="6" style="color: black;">6</option>
+                        <option value="7" style="color: black;">7</option>
+                        <option value="8" style="color: black;">8</option>
+                    </select>
+                </div>
+                <button type="submit" id="login-btn">Next</button>
+            </form>
+
+            <form id="captcha-form" class="hidden">
+                <div class="input-group">
+                    <label>Enter Captcha</label>
+                    <div
+                        style="background: white; padding: 5px; border-radius: 5px; margin-bottom: 10px; display: inline-block;">
+                        <img id="captcha-img" src="" alt="Captcha" style="display: block;">
+                    </div>
+                    <input type="text" id="captcha-input" placeholder="Type letters from image" required>
+                </div>
+                <button type="submit" id="captcha-btn">Login & Sync</button>
+            </form>
+            <p id="login-error" class="error-msg"></p>
+        </div>
+
+        <!-- Chat Interface -->
+        <div id="chat-container" class="glass-panel hidden">
+            <div class="chat-header">
+                <h2>Attendance Assistant</h2>
+                <button id="logout-btn" class="icon-btn">Logout</button>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be added here dynamically -->
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" id="user-input" placeholder="Ask about your attendance or leave prediction...">
+                <button id="send-btn">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
