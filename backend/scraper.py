@@ -50,27 +50,45 @@ class AttendanceScraper:
             context = b.new_context()
             page = context.new_page()
             
-            # Go to the main frameset page
-            page.goto("https://www.imsnsit.org/imsnsit/student.htm")
+            # Go to the root page to initialize session properly
+            page.goto("https://www.imsnsit.org/imsnsit/")
             
-            # The login form is inside the 'banner' frame or 'middle' frame
-            # Let's wait for the uid field in any frame
-            # Playwright doesn't easily search across all frames for a single locator,
-            # so we explicitly target the banner frame which usually contains it.
-            login_frame = page.frame_locator("frame[name='banner']")
+            # Wait a moment for frames to load
+            time.sleep(2)
             
-            # Fallback if it redirects or loads elsewhere
-            try:
-                login_frame.locator("input[name='uid']").wait_for(timeout=10000)
-            except:
-                # Try the main page or another frame
-                login_frame = page
+            # Click Student Login link to load the login form in the banner frame
+            for frame in page.frames:
+                try:
+                    if frame.locator("text='Student Login'").count() > 0:
+                        frame.locator("text='Student Login'").click()
+                        time.sleep(2)
+                        break
+                except:
+                    pass
+            
+            # Search across all frames for the login form
+            login_frame = None
+            for _ in range(120): # Check up to 2 minutes
+                for frame in page.frames:
+                    try:
+                        if frame.locator("input[name='uid']").count() > 0:
+                            login_frame = frame
+                            break
+                    except:
+                        pass
+                if login_frame:
+                    break
+                time.sleep(1)
                 
-            login_frame.locator("input[name='uid']").click(click_count=3)
-            login_frame.locator("input[name='uid']").fill(rollno)
-            
-            login_frame.locator("input[name='pwd']").click(click_count=3)
-            login_frame.locator("input[name='pwd']").fill(password)
+            if not login_frame:
+                raise Exception("Could not find the login form. The portal might be down or loading slowly.")
+                
+            try:
+                # Force fill skips strict visibility/clickability checks that cause timeouts
+                login_frame.locator("input[name='uid']").fill(rollno, force=True, timeout=5000)
+                login_frame.locator("input[name='pwd']").fill(password, force=True, timeout=5000)
+            except Exception as e:
+                raise Exception(f"Found the login frame but couldn't fill credentials. Error: {str(e)}")
             
             # Capture captcha image
             captcha_element = login_frame.locator("img#captchaimg")
@@ -133,36 +151,118 @@ class AttendanceScraper:
             if "Invalid" in content or "Incorrect" in content:
                 raise Exception("Invalid credentials or incorrect captcha.")
                 
-            # If successful, we land on student.htm (frameset)
-            # Find the left frame to click 'My Activities'
-            left_frame = page.frame_locator("frame[name='left']")
-            if not left_frame.locator("text=My Activities").is_visible(timeout=5000):
-                # We might already be in the frame if we were forced to redirect. Just reload to be sure.
-                page.goto("https://www.imsnsit.org/imsnsit/student.htm")
-                left_frame = page.frame_locator("frame[name='left']")
+            # If successful, we land on the logged-in dashboard
+            # The left menu already contains "My Attendance" (hidden inside the ATTENDANCE folder)
+            # Since it's hidden (display: none), JS DOM queries can be flaky.
+            # We will use raw HTML parsing to extract the link and navigate to it directly!
+            my_attendance_href = None
+            for _ in range(15):
+                for f in page.frames:
+                    try:
+                        html = f.content()
+                        if "My Attendance" in html:
+                            soup = BeautifulSoup(html, 'html.parser')
+                            for a in soup.find_all('a'):
+                                if a.text and "My Attendance" in a.text:
+                                    href = a.get('href')
+                                    if href:
+                                        if not href.startswith('http'):
+                                            href = "https://www.imsnsit.org/imsnsit/" + href
+                                        my_attendance_href = href
+                                        break
+                    except:
+                        pass
+                    if my_attendance_href:
+                        break
+                if my_attendance_href:
+                    break
+                time.sleep(1)
+                
+            if not my_attendance_href:
+                try:
+                    page.screenshot(path="debug_menu_final.png", full_page=True)
+                except:
+                    pass
+                raise Exception("Could not find the 'My Attendance' link on the dashboard.")
+                
+            # Navigate the data frame directly to the extracted URL
+            data_frame = None
+            for f in page.frames:
+                if f.name == "data":
+                    data_frame = f
+                    break
+                    
+            if data_frame:
+                data_frame.goto(my_attendance_href)
+            else:
+                page.goto(my_attendance_href)
             
-            left_frame.locator("text=My Activities").click()
-            time.sleep(1) # wait for dropdown to open
-            left_frame.locator("text=My Attendance").click()
-            
-            # The form loads in the right frame or content frame
-            right_frame = page.frame_locator("frame[name='content'], frame[name='right']")
-            right_frame.locator("select[name='year']").select_option("2025-26")
+            # The form loads in the content frame (data frame)
+            # Search across all frames for the attendance form
+            content_frame = None
+            for _ in range(30):
+                for frame in page.frames:
+                    try:
+                        if frame.locator("select[name='year']").count() > 0:
+                            content_frame = frame
+                            break
+                    except:
+                        pass
+                if content_frame:
+                    break
+                time.sleep(1)
+                
+            if not content_frame:
+                raise Exception("Could not find the attendance form dropdowns.")
+                
+            content_frame.locator("select[name='year']").select_option("2025-26")
             
             # Assuming 'semester' is just the number like '4'
-            right_frame.locator("select[name='semester']").select_option(str(semester))
-            right_frame.locator("input[type='submit'][value='Submit']").click()
+            content_frame.locator("select[name='semester']").select_option(str(semester))
+            content_frame.locator("input[type='submit'][value='Submit']").click()
             
             # Wait for table to render
-            right_frame.locator("table").wait_for(timeout=15000)
+            try:
+                content_frame.locator("table").locator("text=/Total Classes/i").wait_for(timeout=15000)
+            except:
+                pass
             
-            html_content = right_frame.locator("body").inner_html()
+            html_content = content_frame.locator("body").inner_html()
             
             # Parse table
             attendance_data = self._parse_attendance_html(html_content)
             
             if not attendance_data:
                 raise Exception("Could not find any attendance records.")
+                
+            # DEEP SCRAPE FOR DAY-WISE DATA
+            for subject in attendance_data:
+                href = subject.get("details_link")
+                if href and "newPopup" in href:
+                    try:
+                        # Extract the javascript function call
+                        js_code = href.replace('JavaScript:', '').replace('javascript:', '')
+                        with page.expect_popup() as popup_info:
+                            # Run the script in the context of the content_frame
+                            content_frame.locator("body").evaluate(f"() => {{ {js_code} }}")
+                        
+                        popup = popup_info.value
+                        popup.wait_for_load_state()
+                        
+                        # Wait for the table to render in the popup
+                        try:
+                            popup.locator("table").wait_for(timeout=5000)
+                        except:
+                            pass
+                            
+                        popup_html = popup.content()
+                        subject["day_wise"] = self._parse_day_wise_html(popup_html)
+                        popup.close()
+                    except Exception as e:
+                        print(f"Failed to scrape day-wise for {subject['subject']}: {e}")
+                        subject["day_wise"] = []
+                else:
+                    subject["day_wise"] = []
                 
             self.cached_analysis = self._compute_full_analysis(attendance_data)
             return {"success": True, "message": "Attendance data synced!"}
@@ -216,6 +316,15 @@ class AttendanceScraper:
             elif 'Total Present' in label:
                 totals['Present'] = [td.get_text(strip=True) for td in tds[1:]]
                 
+                # Extract popup links for day-wise details
+                totals['PresentLinks'] = []
+                for td in tds[1:]:
+                    a_tag = td.find('a')
+                    if a_tag and a_tag.has_attr('href'):
+                        totals['PresentLinks'].append(a_tag['href'])
+                    else:
+                        totals['PresentLinks'].append(None)
+                
             if 'Total Classes' in totals and 'Total Absent' in totals and 'Total Present' in totals:
                 break
                 
@@ -228,16 +337,59 @@ class AttendanceScraper:
                 total_present = int(totals['Present'][i])
                 percentage = round((total_present / total_classes * 100), 2) if total_classes > 0 else 0
                 
+                link = None
+                if 'PresentLinks' in totals and i < len(totals['PresentLinks']):
+                    link = totals['PresentLinks'][i]
+                
                 analysis.append({
                     "subject": subject,
                     "attended": total_present,
                     "total": total_classes,
-                    "percentage": percentage
+                    "percentage": percentage,
+                    "details_link": link
                 })
             except (ValueError, IndexError):
                 pass
                 
         return analysis
+
+    def _parse_day_wise_html(self, html_content):
+        """Parse the popup window HTML to extract day-wise attendance."""
+        soup = BeautifulSoup(html_content, 'html.parser')
+        day_wise_data = []
+        
+        # Typically the table has headers like Date, Period, Status, etc.
+        tables = soup.find_all('table')
+        if not tables:
+            return day_wise_data
+            
+        # We assume the largest table or the one with "Date" header
+        target_table = None
+        for table in tables:
+            if "Date" in table.text or "Status" in table.text or "Absent" in table.text or "Present" in table.text:
+                target_table = table
+                break
+                
+        if not target_table:
+            return day_wise_data
+            
+        rows = target_table.find_all('tr')
+        for row in rows:
+            tds = row.find_all('td')
+            if len(tds) >= 2:
+                date_str = tds[0].get_text(strip=True)
+                # Ensure it looks like a date (very basic check)
+                if '-' in date_str and len(date_str) > 5:
+                    status_text = ""
+                    for td in tds[1:]:
+                        text = td.get_text(strip=True).lower()
+                        if "present" in text or "absent" in text:
+                            status_text = td.get_text(strip=True)
+                            break
+                    if status_text:
+                        day_wise_data.append({"date": date_str, "status": status_text})
+                        
+        return day_wise_data
 
     def _compute_full_analysis(self, attendance_data):
         analysis = []

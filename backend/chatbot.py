@@ -1,6 +1,8 @@
 class ChatbotEngine:
     def __init__(self, scraper):
         self.scraper = scraper
+        self.state = "idle"
+        self.subject_map = {}
 
     def _build_table_75(self, analysis):
         """Build the 75% threshold table."""
@@ -33,11 +35,54 @@ class ChatbotEngine:
         return response
 
     def process_message(self, message):
-        message = message.lower()
+        message = message.strip()
+        message_lower = message.lower()
         analysis = self.scraper.get_full_analysis()
         
         if not analysis:
             return "I couldn't fetch your attendance data. Please check your login credentials."
+
+        # Handle numeric input when waiting for a subject selection (SW mode)
+        if self.state == "waiting_for_subject_number":
+            if message.isdigit():
+                idx = int(message)
+                if idx in self.subject_map:
+                    s = self.subject_map[idx]
+                    self.state = "idle"  # Reset state
+                    
+                    # Build day-wise details response
+                    response = f"📘 **Day-wise Attendance for {s['subject']}**\n\n"
+                    if not s.get("day_wise"):
+                        response += "No day-wise data available for this subject."
+                    else:
+                        response += "| Date | Status |\n|:---|:---|\n"
+                        for entry in s["day_wise"]:
+                            icon = "✅" if "present" in entry["status"].lower() else "🔴"
+                            response += f"| {entry['date']} | {icon} {entry['status']} |\n"
+                    return response
+                else:
+                    return f"Invalid number. Please enter a valid serial number from the list."
+            else:
+                self.state = "idle"
+                # If it's not a digit, reset state and process it as a normal command below
+
+        if message_lower == "hi":
+            # Command: HI -> Full Attendance Summary
+            response = self._build_table_75(analysis)
+            response += "\n"
+            response += self._build_table_65(analysis)
+            response += "\n*Type **SW** to get subject-wise detailed attendance!*"
+            return response
+            
+        elif message_lower == "sw":
+            # Command: SW -> List subjects with serial numbers
+            self.state = "waiting_for_subject_number"
+            self.subject_map = {i+1: s for i, s in enumerate(analysis)}
+            response = "📋 **Subject-Wise Detailed Attendance**\n\n"
+            response += "Please enter the **serial number** of the subject you want to check:\n\n"
+            for idx, s in self.subject_map.items():
+                response += f"**{idx}.** {s['subject']}\n"
+            return response
 
         # --- Danger zone / short attendance queries ---
         if "danger" in message or "short" in message or "low" in message:
@@ -70,10 +115,11 @@ class ChatbotEngine:
             response += f"**@65% threshold:** {s['message_65']}\n"
             return response
 
-        # --- Default: Full summary with BOTH tables ---
+        # --- Default: Help text ---
         else:
-            response = self._build_table_75(analysis)
-            response += "\n"
-            response += self._build_table_65(analysis)
-            response += "\n*Ask me about 'danger zone', 'safe zone', or a specific subject!*"
+            response = "Welcome to your NSUT Attendance Assistant! 🤖\n\n"
+            response += "Here are some quick commands you can use:\n"
+            response += "- Type **HI** to get your full attendance summary & leave prediction tables.\n"
+            response += "- Type **SW** to see a list of subjects and fetch day-wise attendance.\n"
+            response += "- Or just ask me about 'danger zone' or 'safe zone' subjects!"
             return response
