@@ -23,6 +23,7 @@ class AttendanceScraper:
         self.use_mock = use_mock
         self.cached_analysis = None
         self._last_attendance_payload = {}
+        self._last_portal_catalog = {}
         self.debug_root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scrape")
         os.makedirs(self.debug_root, exist_ok=True)
 
@@ -543,6 +544,7 @@ class AttendanceScraper:
             
             self._ensure_activity_menu_loaded(page, debug_dir, attempt_no)
             portal_catalog = self._extract_portal_catalog(page)
+            self._last_portal_catalog = portal_catalog
             self._write_debug_json(debug_dir, f"06_portal_catalog_attempt_{attempt_no}.json", portal_catalog)
 
             # STEP 3: Find "My Attendance" link (critical - frames may have changed)
@@ -824,10 +826,18 @@ class AttendanceScraper:
             descending_semesters = [str(semester) for semester in range(guessed_int, 0, -1)]
         except:
             pass
+        previous_semester = None
+        try:
+            guessed_int = int(guessed_semester)
+            if guessed_int > 1:
+                previous_semester = str(guessed_int - 1)
+        except:
+            pass
 
         semesters = self._ordered_unique([
             os.getenv("ATTENDANCE_SEMESTER", "").strip(),
             os.getenv("SEMESTER", "").strip(),
+            previous_semester,
             guessed_semester,
             *descending_semesters,
             semester_state.get("value"),
@@ -1088,6 +1098,7 @@ class AttendanceScraper:
             "sections": [],
             "links": [],
             "data_surfaces": [],
+            "student_profile": {},
         }
         seen_sections = set()
         seen_links = set()
@@ -1102,6 +1113,20 @@ class AttendanceScraper:
                 frame_text = self._visible_text(str(soup)).lower()
                 if "my attendance" not in frame_text and "my timetable" not in frame_text and "my profile" not in frame_text:
                     continue
+
+                text_blob = self._visible_text(str(soup))
+                welcome_match = re.search(r"Welcome\s*:\s*([A-Za-z][A-Za-z .'-]+)", text_blob, re.I)
+                if welcome_match and not catalog["student_profile"].get("name"):
+                    catalog["student_profile"]["name"] = " ".join(welcome_match.group(1).split())
+
+                if not catalog["student_profile"].get("photo_available"):
+                    for image in soup.find_all("img"):
+                        width = image.get("width") or ""
+                        height = image.get("height") or ""
+                        classes = " ".join(image.get("class") or []).lower()
+                        if classes == "round" or (str(width).isdigit() and str(height).isdigit() and int(width) >= 40 and int(height) >= 40):
+                            catalog["student_profile"]["photo_available"] = True
+                            break
 
                 active_section = None
                 for node in soup.find_all(["b", "a"]):
@@ -1455,11 +1480,6 @@ class AttendanceScraper:
             "calendar": [],
         }
 
-        tables = soup.find_all("table")
-        if not any("Total Classes" in table.get_text(" ", strip=True) for table in tables):
-            self._last_attendance_payload = payload
-            return payload
-
         academic_year = selected_value("select[name='year']")
         semester = selected_value("select[name='sem']") or selected_value("select[name='semester']")
         rollno_input = soup.find("input", {"name": "recentitycode"})
@@ -1473,6 +1493,11 @@ class AttendanceScraper:
             "semester": semester or "",
             "academic_year": academic_year or "",
         }
+
+        tables = soup.find_all("table")
+        if not any("Total Classes" in table.get_text(" ", strip=True) for table in tables):
+            self._last_attendance_payload = payload
+            return payload
 
         header_pattern = re.compile(r"Name:\s*(.*?)(?:\s*\(([^)]+)\))?\s*,\s*Semester\s*:\s*(\d+)", re.I)
         header_match = header_pattern.search(soup.get_text(" ", strip=True))
@@ -1741,10 +1766,16 @@ class AttendanceScraper:
                     "description": event.get("description", ""),
                 })
 
+        student = {
+            **((portal_catalog or {}).get("student_profile") or {}),
+            **(attendance_payload.get("student") or {}),
+        }
+        student = {key: value for key, value in student.items() if value}
+
         return {
             "schema_version": 2,
             "synced_at": datetime.utcnow().isoformat() + "Z",
-            "student": attendance_payload.get("student", {}),
+            "student": student,
             "attendance": subjects,
             "insights": {
                 "subject_count": len(subjects),

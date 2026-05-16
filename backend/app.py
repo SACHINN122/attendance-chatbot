@@ -6,6 +6,7 @@ from logging_config import setup_logging
 import os
 import json
 import socket
+import uuid
 
 app = Flask(__name__)
 CORS(app)
@@ -52,6 +53,53 @@ def _default_rollno():
 def _default_password():
     return os.getenv('password') or os.getenv('PASSWORD') or ""
 
+def _cache_file_for(rollno):
+    return os.path.join(DATA_DIR, f"{rollno}.json") if rollno else ""
+
+def _cache_schema_version(cached_data):
+    return cached_data.get("schema_version", 1) if isinstance(cached_data, dict) else 1
+
+def _load_cached_analysis(rollno):
+    cache_file = _cache_file_for(rollno)
+    if not cache_file or not os.path.exists(cache_file):
+        return None
+    with open(cache_file, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def _merge_live_profile(analysis, scraper):
+    """Attach safe profile hints from the authenticated portal to cached analysis."""
+    if not isinstance(analysis, dict):
+        return analysis
+
+    portal_catalog = getattr(scraper, "_last_portal_catalog", {}) or {}
+    attendance_payload = getattr(scraper, "_last_attendance_payload", {}) or {}
+    live_student = {
+        **(portal_catalog.get("student_profile") or {}),
+        **(attendance_payload.get("student") or {}),
+    }
+    live_student = {key: value for key, value in live_student.items() if value}
+    if live_student:
+        analysis["student"] = {**live_student, **(analysis.get("student") or {})}
+        analysis["portal"] = analysis.get("portal") or portal_catalog
+        source = analysis.setdefault("source", {})
+        source["profile_source"] = "live_portal"
+    return analysis
+
+def _create_cached_session(session_id, rollno, cached_data, source_scraper=None):
+    scraper = AttendanceScraper(use_mock=True)
+    scraper.cached_analysis = cached_data
+    chatbot = ChatbotEngine(scraper)
+    analysis = chatbot.analysis_payload()
+    analysis = _merge_live_profile(analysis, source_scraper) if source_scraper else analysis
+    scraper.cached_analysis = analysis
+    chatbot = ChatbotEngine(scraper)
+    user_sessions[session_id] = {
+        "scraper": scraper,
+        "chatbot": chatbot,
+        "rollno": rollno
+    }
+    return analysis, _cache_schema_version(cached_data)
+
 @app.route('/')
 def serve_index():
     return send_from_directory(FRONTEND_DIR, 'index.html')
@@ -63,13 +111,11 @@ def serve_static(filename):
 @app.route('/api/config', methods=['GET'])
 def config():
     rollno = _default_rollno()
-    cache_file = os.path.join(DATA_DIR, f"{rollno}.json") if rollno else ""
+    cache_file = _cache_file_for(rollno)
     cache_schema_version = None
     if cache_file and os.path.exists(cache_file):
         try:
-            with open(cache_file, "r", encoding="utf-8") as f:
-                cached_data = json.load(f)
-            cache_schema_version = cached_data.get("schema_version", 1) if isinstance(cached_data, dict) else 1
+            cache_schema_version = _cache_schema_version(_load_cached_analysis(rollno))
         except:
             cache_schema_version = None
     return jsonify({
@@ -117,25 +163,11 @@ def check_cache():
     if not rollno:
         return jsonify({"success": False, "message": "Roll number required"})
 
-    cache_file = os.path.join(DATA_DIR, f"{rollno}.json")
+    cache_file = _cache_file_for(rollno)
     if os.path.exists(cache_file):
-        with open(cache_file, "r", encoding="utf-8") as f:
-            cached_data = json.load(f)
-        cache_schema_version = cached_data.get("schema_version", 1) if isinstance(cached_data, dict) else 1
-            
-        import uuid
+        cached_data = _load_cached_analysis(rollno)
         session_id = str(uuid.uuid4())
-        
-        # Create a mock scraper just to hold the data
-        scraper = AttendanceScraper(use_mock=True)
-        scraper.cached_analysis = cached_data
-        chatbot = ChatbotEngine(scraper)
-        
-        user_sessions[session_id] = {
-            "scraper": scraper,
-            "chatbot": chatbot,
-            "rollno": rollno
-        }
+        analysis, cache_schema_version = _create_cached_session(session_id, rollno, cached_data)
         return jsonify({
             "success": True,
             "session_id": session_id,
@@ -143,7 +175,7 @@ def check_cache():
             "assistant_version": APP_VERSION,
             "cache_schema_version": cache_schema_version,
             "cache_needs_refresh": cache_schema_version < 2,
-            "analysis": chatbot.analysis_payload()
+            "analysis": analysis
         })
     
     return jsonify({"success": False, "message": "No cache found"})
@@ -185,6 +217,33 @@ def verify_captcha():
         return jsonify({"success": True, "message": "✓ Login successful! Attendance data fetched.", "data": scraper.get_full_analysis()})
     else:
         debug_dir = scraper.get_session_debug_dir(session_id)
+        rollno = user_sessions[session_id]["rollno"]
+        if "No attendance records found" in (result.get("message") or ""):
+            try:
+                cached_data = _load_cached_analysis(rollno)
+                if cached_data:
+                    analysis, cache_schema_version = _create_cached_session(
+                        session_id,
+                        rollno,
+                        cached_data,
+                        source_scraper=scraper,
+                    )
+                    try:
+                        scraper.close_session(session_id)
+                    except:
+                        pass
+                    return jsonify({
+                        "success": True,
+                        "message": "✓ Login accepted, but the live portal returned an empty attendance report. I loaded the last valid local cache instead.",
+                        "live_sync_warning": "Portal returned no non-zero attendance records for the tested year/semester filters.",
+                        "debug_dir": debug_dir,
+                        "cache_schema_version": cache_schema_version,
+                        "cache_needs_refresh": cache_schema_version < 2,
+                        "data": analysis,
+                    })
+            except:
+                pass
+
         # Retryable failures should keep session alive so user can retry without password.
         if result.get("retryable"):
             return jsonify({

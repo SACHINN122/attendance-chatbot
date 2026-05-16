@@ -3,6 +3,7 @@ let rollNo = null;
 let autoOcrTried = false;
 let captchaIssuedAt = 0;
 let appConfig = {};
+let currentAnalysis = null;
 
 const App = {
     async init() {
@@ -33,6 +34,24 @@ const App = {
             .replace(/"/g, '&quot;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;');
+    },
+
+    escapeHtml(value) {
+        return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    },
+
+    initials(name) {
+        const clean = String(name || '').trim();
+        if (!clean) return 'AA';
+        return clean
+            .split(/\s+/)
+            .filter(Boolean)
+            .slice(0, 2)
+            .map((part) => part[0].toUpperCase())
+            .join('');
     },
 
     async checkCache(rollno) {
@@ -81,7 +100,7 @@ const App = {
                 <h1>Attendance Assistant</h1>
                 <p style="color: var(--text-secondary)">Connect once, then use the cached assistant workspace.</p>
                 <div class="input-group">
-                    <input type="text" id="rollno" placeholder="Roll No (e.g. 2024UME4116)" value="${savedRollValue}">
+                    <input type="text" id="rollno" placeholder="Roll number" value="${savedRollValue}">
                 </div>
                 <div class="input-group">
                     <input type="password" id="password" placeholder="${passwordPlaceholder}" value="${savedPasswordValue}">
@@ -204,7 +223,10 @@ const App = {
             if (data.success) {
                 localStorage.setItem('nsut_rollno', rollNo);
                 this.renderChat(data.data);
-                this.addBotMessage(data.message + "\n\nType **HI** for the full dashboard, **CODES** for shortcuts, or ask a subject code like **MEMEC303**.");
+                const warning = data.live_sync_warning
+                    ? `\n\n**Live sync note:** ${data.live_sync_warning}. Debug folder: ${data.debug_dir || 'not available'}`
+                    : "";
+                this.addBotMessage(data.message + warning + "\n\nType **HI** for the full dashboard, **PROFILE** for student info, **CODES** for shortcuts, or ask a subject code like **MEMEC303**.");
             } else {
                 btn.innerHTML = 'Verify & Deep Scrape';
                 if (data.retryable && data.captcha_base64) {
@@ -233,7 +255,10 @@ const App = {
                    if (data.success) {
                        localStorage.setItem('nsut_rollno', rollNo);
                        this.renderChat(data.data);
-                       this.addBotMessage("CAPTCHA auto-read with OCR. " + data.message + "\n\nType **HI** for the full dashboard or **CODES** for shortcuts.");
+                       const warning = data.live_sync_warning
+                           ? `\n\n**Live sync note:** ${data.live_sync_warning}. Debug folder: ${data.debug_dir || 'not available'}`
+                           : "";
+                       this.addBotMessage("CAPTCHA auto-read with OCR. " + data.message + warning + "\n\nType **HI** for the full dashboard or **CODES** for shortcuts.");
                    } else {
                        btn.innerHTML = originalText;
                        btn.disabled = false;
@@ -253,20 +278,26 @@ const App = {
     },
 
     renderChat(analysis = null) {
+        currentAnalysis = analysis;
         const insights = analysis && analysis.insights ? analysis.insights : null;
         const student = analysis && analysis.student ? analysis.student : {};
         const source = analysis && analysis.source ? analysis.source : {};
         const headerMeta = insights
             ? `${insights.overall_percentage || 0}% - ${insights.total_attended || 0}/${insights.total_classes || 0} - ${insights.total_absent || 0} absent${source.legacy_cache ? ' - legacy cache' : ''}`
             : 'Smart attendance workspace';
-        const studentName = student.name || rollNo || 'Attendance Assistant';
+        const studentName = student.name || 'Attendance Assistant';
+        const safeStudentName = this.escapeHtml(studentName);
+        const avatarText = this.escapeHtml(this.initials(studentName));
 
         document.getElementById('app').innerHTML = `
             <div class="glass-panel chat-container">
                 <div class="chat-header">
-                    <div>
-                        <h2 style="margin: 0; font-size: 1.2rem;">${studentName}</h2>
-                        <div class="chat-subtitle">${headerMeta}</div>
+                    <div class="student-heading">
+                        <div class="student-avatar" title="Student profile">${avatarText}</div>
+                        <div>
+                            <h2 style="margin: 0; font-size: 1.2rem;">${safeStudentName}</h2>
+                            <div class="chat-subtitle">${this.escapeHtml(headerMeta)}</div>
+                        </div>
                     </div>
                     <button id="logoutBtn" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: rgba(255,255,255,0.1); border-radius: 8px; color: white; border: none; cursor: pointer;">Log Out</button>
                 </div>

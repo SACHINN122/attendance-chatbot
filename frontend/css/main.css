@@ -133,6 +133,28 @@ button:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
+}
+
+.student-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+}
+
+.student-avatar {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(20, 184, 166, 0.9));
+    color: white;
+    font-weight: 800;
+    letter-spacing: 0;
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 .chat-subtitle {
