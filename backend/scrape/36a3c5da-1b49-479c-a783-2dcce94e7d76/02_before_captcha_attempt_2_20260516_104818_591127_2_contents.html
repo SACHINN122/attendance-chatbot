@@ -1,0 +1,29 @@
+<html><head><link href="theme_grey/main.css" type="text/css" rel="stylesheet">
+
+<script language="javascript">
+	function foo(){
+	pg='';
+	if(parent.frames[2]){
+		pg=parent.frames[2].location.href
+		msg='<div style="padding:20"><font face=Arial><ul><li>Please press F11 (Key) to view the page in full screen</li><li>pressing F11 again will bring back the screen....</li></ul></div>';
+		if(pg.indexOf('blank.htm')>0 && parent.frames[2]) parent.frames[2].document.getElementById('msg1').innerHTML=msg;
+		}
+	}
+</script>
+
+
+</head><body onload="foo();" bgcolor="#FFFFFF" topmargin="2px" leftmargin="0px" rightmargin="0px">
+<table cellspacing="0" cellpadding="0" width="100%" height="100%" border="0px">
+    <tbody><tr height="10"><td width="5"><img src="theme_grey/list-top-left.png" border="0"></td>
+		<td class="list-top-middle" width="99%" align="center">PLUM ERP</td>
+		<td><img src="theme_grey/list-top-right.png" border="0"></td></tr>
+    <tr height="*"><td width="5" class="list-data-left"></td>
+		<td class="plum-label-white" width="99%" valign="top" id="msg1" name="msg1"></td>
+		<td width="5px" class="list-data-right"></td></tr>
+	<tr height="10"><td width="5"><img src="theme_grey/list-foot-left.png"></td>
+		<td class="list-foot"></td>
+		<td width="1%" align="right"><img src="theme_grey/list-foot-right.png"></td>
+	</tr>			
+</tbody></table>
+
+</body></html>
