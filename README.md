@@ -423,21 +423,50 @@ After initial scrape, the bot clicks on subject links to fetch per-day attendanc
 
 ## 🚀 Render Deployment Guide
 
-Because the app uses **Playwright** (which requires a hidden Chromium browser to run), deploying it requires a specific configuration. 
+Because the app uses **Playwright** to open the NSUT portal in a hidden Chromium browser, Render needs a build step that installs Chromium and a start command that binds Gunicorn to Render's assigned port.
 
 Since the Flask backend automatically serves the frontend files, **you only need to deploy a single Web Service!**
 
-The easiest way to deploy to Render is using the provided `render.yaml` file. 
+The easiest path is the provided `render.yaml` Blueprint. Use the manual settings below when you want to configure the Web Service yourself from the Render dashboard.
 
-### Step 1: Push to GitHub
-Make sure all your code (including `render.yaml`, `requirements.txt`, and the frontend/backend folders) is pushed to a GitHub repository.
+### Blueprint Deployment
 
-### Step 2: Deploy on Render
 1. Go to your [Render Dashboard](https://dashboard.render.com/).
 2. Click **New** -> **Blueprint**.
 3. Connect your GitHub repository.
-4. Render will automatically detect the `render.yaml` file and configure everything for you (Build Commands, Start Commands, and Environment Variables).
-5. Click **Apply**!
+4. Select the repository containing `render.yaml`.
+5. Click **Apply**.
+
+### Manual Web Service Configuration
+
+If you do not use Blueprint, create **New** -> **Web Service** and use these values:
+
+| Render field | Value |
+| --- | --- |
+| Runtime | `Python 3` |
+| Root Directory | Leave empty, or set to repository root |
+| Build Command | `cd backend && pip install --upgrade pip && pip install -r requirements.txt && python -m playwright install chromium` |
+| Start Command | `cd backend && gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 1 --timeout 180` |
+| Health Check Path | `/api/config` |
+
+Add these environment variables in **Environment**:
+
+| Key | Value |
+| --- | --- |
+| `PLAYWRIGHT_BROWSERS_PATH` | `0` |
+| `PYTHON_VERSION` | `3.10.0` |
+| `HOST` | `0.0.0.0` |
+| `roll_no` | Your test roll number, only if you want the login form prefilled |
+| `password` | Your portal password, only as a Render secret |
+| `ATTENDANCE_YEAR` | Optional preferred academic year, for example `2025-26` |
+| `ATTENDANCE_SEMESTER` | Optional preferred semester, for example `4` |
+| `CAPTCHA_SOLVER` | Optional: `runanywhere` or `tesseract` |
+| `RUNANYWHERE_CAPTCHA_URL` | Required only when `CAPTCHA_SOLVER=runanywhere` |
+| `RUNANYWHERE_API_KEY` | Required only when your Runanywhere endpoint needs an API key |
+
+Render supplies `PORT` automatically; do not hard-code it. Keep `backend/data/`, `backend/scrape/`, `.env`, screenshots, and debug HTML out of git because they are local runtime artifacts and may contain portal data.
+
+*Note: The first deployment can take 2-4 minutes because Chromium is downloaded during the build.*
 
 ---
 
@@ -452,29 +481,6 @@ MIT License. See LICENSE file (if present).
 For issues, check logs or raise an issue in the repository.
 
 **Happy learning!** 🚀
-
-*Note: The first deployment might take 2-4 minutes because it has to download and install the Chromium browser in the cloud.*
-
----
-
-### Alternative: Manual Render Deployment
-If you prefer not to use Blueprint, create a **New Web Service** with these settings:
-
-- **Environment**: `Python 3`
-- **Root Directory**: `.` (leave empty or set to root)
-- **Build Command**: 
-  ```bash
-  cd backend && pip install -r requirements.txt && playwright install chromium
-  ```
-- **Start Command**: 
-  ```bash
-  cd backend && gunicorn app:app
-  ```
-
-**Environment Variables:**
-You MUST add this exact environment variable, otherwise Render will delete the downloaded browser after the build step!
-- Key: `PLAYWRIGHT_BROWSERS_PATH`
-- Value: `0`
 
 ---
 

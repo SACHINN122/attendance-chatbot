@@ -14,8 +14,8 @@ first monthly table shape and did not understand the portal's final `Overall Cla
 
 The fixed scraper now:
 
-- prefers likely current semesters in descending order, for example `4, 3, 2, 1` for roll
-  `2024UME4116` on 2026-05-16
+- prefers likely current semesters in descending order, for example `4, 3, 2, 1` for the
+  logged-in student's roll number
 - skips empty year/semester results where all overall totals are zero
 - parses the final overall attendance rows across the full portal result
 - maps subject codes like `MEMEC302` to subject names like `Manufacturing Processes-I`
