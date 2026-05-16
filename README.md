@@ -451,7 +451,7 @@ If you do not use Blueprint, create **New** -> **Web Service** and use these val
 | --- | --- |
 | Runtime | `Python 3` |
 | Root Directory | Leave empty, or set to repository root |
-| Build Command | `cd backend && pip install --upgrade pip && pip install -r requirements.txt && python -m playwright install chromium` |
+| Build Command | `pip install --upgrade pip && pip install -r backend/requirements.txt && PLAYWRIGHT_BROWSERS_PATH=/opt/render/project/playwright python -m playwright install --with-deps chromium` |
 | Start Command | `cd backend && gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 1 --timeout 180` |
 | Health Check Path | `/api/config` |
 
@@ -459,8 +459,8 @@ Add these environment variables in **Environment**:
 
 | Key | Value |
 | --- | --- |
-| `PLAYWRIGHT_BROWSERS_PATH` | `0` |
-| `PYTHON_VERSION` | `3.10.0` |
+| `PLAYWRIGHT_BROWSERS_PATH` | `/opt/render/project/playwright` |
+| `PYTHON_VERSION` | `3.12.4` |
 | `HOST` | `0.0.0.0` |
 | `roll_no` | Your test roll number, only if you want the login form prefilled |
 | `password` | Your portal password, only as a Render secret |
@@ -471,6 +471,8 @@ Add these environment variables in **Environment**:
 | `RUNANYWHERE_API_KEY` | Required only when your Runanywhere endpoint needs an API key |
 
 Render supplies `PORT` automatically; do not hard-code it. Keep `backend/data/`, `backend/scrape/`, `.env`, screenshots, and debug HTML out of git because they are local runtime artifacts and may contain portal data.
+
+If the live app says `Playwright browser failed to start`, the deployed service was built without Chromium or with a different `PLAYWRIGHT_BROWSERS_PATH` than runtime. Update the Build Command and environment variable above, then trigger **Manual Deploy -> Clear build cache & deploy** on Render.
 
 *Note: The first deployment can take 2-4 minutes because Chromium is downloaded during the build.*
 

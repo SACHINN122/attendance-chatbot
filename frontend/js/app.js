@@ -84,6 +84,14 @@ const App = {
         return String(subject.semester || source.semester || student.semester || 'Current');
     },
 
+    subjectFilterValue(subject) {
+        return [
+            subject.academic_year || '',
+            this.subjectSemester(subject),
+            subject.code || subject.subject || 'subject'
+        ].join('|');
+    },
+
     studentAvatar(student, name) {
         const photo = student.photo_base64 || student.photo_data_url || '';
         if (photo && String(photo).startsWith('data:image/')) {
@@ -157,7 +165,7 @@ const App = {
         const search = dashboardFilters.search.trim().toLowerCase();
         const rows = this.getSubjects()
             .filter((subject) => {
-                const value = subject.code || this.subjectLabel(subject);
+                const value = this.subjectFilterValue(subject);
                 return dashboardFilters.subject === 'all' || value === dashboardFilters.subject;
             })
             .filter((subject) => dashboardFilters.semester === 'all' || this.subjectSemester(subject) === dashboardFilters.semester)
@@ -377,8 +385,11 @@ const App = {
             ? syncDate.toLocaleString()
             : 'Not synced';
         const subjectOptions = subjects.map((subject) => {
-            const value = subject.code || this.subjectLabel(subject);
-            return `<option value="${this.escapeAttr(value)}" ${dashboardFilters.subject === value ? 'selected' : ''}>${this.escapeHtml(this.subjectLabel(subject))}</option>`;
+            const value = this.subjectFilterValue(subject);
+            const label = semesterOptions.length > 1
+                ? `Sem ${this.subjectSemester(subject)} - ${this.subjectLabel(subject)}`
+                : this.subjectLabel(subject);
+            return `<option value="${this.escapeAttr(value)}" ${dashboardFilters.subject === value ? 'selected' : ''}>${this.escapeHtml(label)}</option>`;
         }).join('');
 
         panel.innerHTML = `

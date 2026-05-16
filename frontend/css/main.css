@@ -8,6 +8,10 @@
     --glass-border: rgba(255, 255, 255, 0.1);
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
@@ -17,7 +21,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    box-sizing: border-box;
     padding: 1rem;
 }
 
@@ -149,6 +152,15 @@ button:hover {
     min-width: 0;
 }
 
+.student-heading > div:last-child {
+    min-width: 0;
+}
+
+.student-heading h2,
+.chat-subtitle {
+    overflow-wrap: anywhere;
+}
+
 .student-avatar {
     width: 44px;
     height: 44px;
@@ -243,6 +255,7 @@ button:hover {
     border-radius: 8px;
     line-height: 1.5;
     animation: fadeIn 0.3s ease;
+    overflow-wrap: anywhere;
 }
 
 .message.bot {
@@ -546,6 +559,7 @@ button:hover {
     text-align: left;
     font-size: 0.85rem;
     vertical-align: top;
+    overflow-wrap: anywhere;
 }
 
 .data-table th {
@@ -577,10 +591,11 @@ button:hover {
     font-size: 0.9rem;
 }
 
-@media (max-width: 1040px) {
+@media (max-width: 1180px) {
     #app {
         height: auto;
         min-height: calc(100vh - 2rem);
+        max-width: 960px;
     }
 
     .workspace-body {
@@ -608,6 +623,11 @@ button:hover {
     .chat-input-area {
         flex-direction: column;
         align-items: stretch;
+    }
+
+    .chat-header button,
+    .chat-input-area button {
+        width: 100%;
     }
 
     .filter-grid,
