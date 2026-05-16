@@ -2,6 +2,12 @@
 
 An intelligent attendance analytics chatbot for NSUT that predicts leave eligibility and provides insights into your attendance patterns using web scraping and conversational AI.
 
+The logged-in workspace now combines chat with an interactive dashboard:
+- subject, semester, date-range, status, and search filters
+- overall metrics, subject comparison bars, cumulative attendance trend, subject table, and date-wise records
+- authenticated profile header with portal name, roll number, and captured student photo when the portal exposes it
+- chat commands for summary, subject-wise details, absences, risk/safe subjects, profile, website surfaces, and shortcut help
+
 ---
 
 ## 🎯 Why This Architecture?
@@ -211,7 +217,7 @@ All endpoints return JSON. Requires `session_id` (except login/cache check).
 - `"ABSENT"` → Subject-wise absences, plus exact dates when v2 day-wise data exists
 - `"SAFE"` → Subjects where the student can skip classes while staying above 75%
 - `"RISK"` → Borderline or below-threshold subjects
-- `"PROFILE"` → Safe profile summary with masked roll number
+- `"PROFILE"` → Authenticated student profile summary in the local app
 - `"CALENDAR"` → Portal marks such as GH/TL/CS/MB
 - `"WEBSITE"` → Authenticated website sections discovered after login
 - `"MEMEC303"` → Details for one subject by code/name

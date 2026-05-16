@@ -257,7 +257,19 @@ class ChatbotEngine:
         response = "**Student profile from attendance portal data**\n\n"
         response += f"- Name: **{student.get('name', 'Unknown')}**\n"
         if student.get("rollno"):
-            response += f"- Roll no: **{self._mask_identifier(student.get('rollno'))}**\n"
+            response += f"- Roll no: **{student.get('rollno')}**\n"
+        for label, key in [
+            ("Student ID", "student_id"),
+            ("Enrollment no", "enrollment_no"),
+            ("Section", "section"),
+            ("Batch", "batch"),
+            ("Gender", "gender"),
+            ("Category", "category"),
+            ("Email", "email"),
+            ("Mobile", "mobile"),
+        ]:
+            if student.get(key):
+                response += f"- {label}: **{student.get(key)}**\n"
         response += f"- Degree: **{student.get('degree', 'Unknown')}**\n"
         response += f"- Department: **{student.get('department', 'Unknown')}**\n"
         response += f"- Semester: **{source.get('semester') or student.get('semester', 'Unknown')}**\n"

@@ -1092,6 +1092,115 @@ class AttendanceScraper:
             self._write_debug_text(debug_dir, f"06_my_activities_nav_error_attempt_{attempt_no}.txt", str(e))
             return False
 
+    def _capture_student_photo_base64(self, page):
+        """Capture the visible authenticated student photo when the portal exposes it."""
+        blocked_markers = ("captcha", "logo", "banner", "icon")
+        preferred_markers = ("round", "photo", "student", "profile", "user")
+
+        for frame in page.frames:
+            try:
+                images = frame.locator("img")
+                count = min(images.count(), 20)
+            except:
+                continue
+
+            for index in range(count):
+                try:
+                    image = images.nth(index)
+                    meta = image.evaluate("""
+                        (img) => ({
+                            src: img.getAttribute('src') || '',
+                            alt: img.getAttribute('alt') || '',
+                            title: img.getAttribute('title') || '',
+                            className: String(img.className || ''),
+                            width: Number(img.getAttribute('width') || img.naturalWidth || img.clientWidth || 0),
+                            height: Number(img.getAttribute('height') || img.naturalHeight || img.clientHeight || 0)
+                        })
+                    """)
+                    marker_text = " ".join(
+                        str(meta.get(key) or "").lower()
+                        for key in ("src", "alt", "title", "className")
+                    )
+                    if any(marker in marker_text for marker in blocked_markers):
+                        continue
+
+                    width = int(meta.get("width") or 0)
+                    height = int(meta.get("height") or 0)
+                    aspect = (width / height) if height else 0
+                    looks_named = any(marker in marker_text for marker in preferred_markers)
+                    looks_photo_sized = width >= 45 and height >= 45 and 0.65 <= aspect <= 1.55
+
+                    if not looks_named and not looks_photo_sized:
+                        continue
+
+                    shot = image.screenshot(timeout=1500)
+                    if shot:
+                        return "data:image/png;base64," + base64.b64encode(shot).decode("utf-8")
+                except:
+                    continue
+
+        return None
+
+    def _extract_profile_pairs(self, soup):
+        """Extract common profile table fields from authenticated portal HTML."""
+        label_map = {
+            "studentid": "student_id",
+            "studentno": "student_id",
+            "studentnumber": "student_id",
+            "enrollmentno": "enrollment_no",
+            "enrollmentnumber": "enrollment_no",
+            "rollno": "rollno",
+            "rollnumber": "rollno",
+            "name": "name",
+            "studentname": "name",
+            "fathername": "father_name",
+            "mothername": "mother_name",
+            "dateofbirth": "date_of_birth",
+            "dob": "date_of_birth",
+            "gender": "gender",
+            "category": "category",
+            "email": "email",
+            "mobileno": "mobile",
+            "mobile": "mobile",
+            "branch": "department",
+            "department": "department",
+            "programme": "degree",
+            "program": "degree",
+            "degree": "degree",
+            "semester": "semester",
+            "section": "section",
+            "batch": "batch",
+        }
+
+        def clean(text):
+            return " ".join(str(text or "").split()).strip(" :-")
+
+        def key_for(label):
+            return re.sub(r"[^a-z0-9]+", "", clean(label).lower())
+
+        pairs = {}
+        for row in soup.find_all("tr"):
+            cells = row.find_all(["th", "td"])
+            if len(cells) < 2:
+                continue
+            label = key_for(cells[0].get_text(" ", strip=True))
+            field = label_map.get(label)
+            value = clean(cells[1].get_text(" ", strip=True))
+            if field and value and len(value) <= 120:
+                pairs.setdefault(field, value)
+
+        text = soup.get_text("\n", strip=True)
+        for line in text.splitlines():
+            if ":" not in line:
+                continue
+            label, value = line.split(":", 1)
+            field = label_map.get(key_for(label))
+            value = clean(value)
+            if field and value and len(value) <= 120:
+                pairs.setdefault(field, value)
+
+        return pairs
+
     def _extract_portal_catalog(self, page):
         """Extract a safe inventory of authenticated portal sections and links."""
         catalog = {
@@ -1118,6 +1227,9 @@ class AttendanceScraper:
                 welcome_match = re.search(r"Welcome\s*:\s*([A-Za-z][A-Za-z .'-]+)", text_blob, re.I)
                 if welcome_match and not catalog["student_profile"].get("name"):
                     catalog["student_profile"]["name"] = " ".join(welcome_match.group(1).split())
+
+                for key, value in self._extract_profile_pairs(soup).items():
+                    catalog["student_profile"].setdefault(key, value)
 
                 if not catalog["student_profile"].get("photo_available"):
                     for image in soup.find_all("img"):
@@ -1171,6 +1283,11 @@ class AttendanceScraper:
         for surface, markers in important.items():
             if any(any(marker in link["text"].lower() for marker in markers) for link in catalog["links"]):
                 catalog["data_surfaces"].append(surface)
+
+        photo_base64 = self._capture_student_photo_base64(page)
+        if photo_base64:
+            catalog["student_profile"]["photo_available"] = True
+            catalog["student_profile"]["photo_base64"] = photo_base64
 
         return catalog
 
