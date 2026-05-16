@@ -162,11 +162,12 @@ All endpoints return JSON. Requires `session_id` (except login/cache check).
 **Request:**
 ```json
 {
-  "rollno": "2024UME4116",
-  "password": "your_password",
-  "semester": "4"
+  "rollno": "2024ABC0000",
+  "password": "your_password"
 }
 ```
+
+`semester` is intentionally not required. The scraper reads the authenticated attendance form and tries likely year/semester filters internally.
 
 **Response (Success):**
 ```json
@@ -204,36 +205,44 @@ All endpoints return JSON. Requires `session_id` (except login/cache check).
 
 ### POST `/api/chat`
 **Chat with the attendance assistant.** Try:
-- `"hi"` → Full attendance summary (75% & 65% thresholds)
-- `"sw"` → Subject-wise detailed view
-- `"danger"` → Show low-attendance subjects
-- `"safe"` → Show subjects you can skip
-- `"subject_name"` → Details for a specific subject
+- `"HI"` → Full attendance dashboard
+- `"SW"` → Subject-wise list, then enter a number for details
+- `"TOTAL"` → Overall attendance and total absent classes
+- `"ABSENT"` → Subject-wise absences, plus exact dates when v2 day-wise data exists
+- `"SAFE"` → Subjects where the student can skip classes while staying above 75%
+- `"RISK"` → Borderline or below-threshold subjects
+- `"PROFILE"` → Safe profile summary with masked roll number
+- `"CALENDAR"` → Portal marks such as GH/TL/CS/MB
+- `"WEBSITE"` → Authenticated website sections discovered after login
+- `"MEMEC303"` → Details for one subject by code/name
 
 **Request:**
 ```json
 {
   "session_id": "uuid-string",
-  "message": "hi"
+  "message": "PROFILE"
 }
 ```
 
 **Response:**
 ```json
 {
-  "reply": "📊 **Table 1: Leave Prediction — 75% Threshold**\n\n🟢 **Mathematics**: 82% (24/29) — Can skip **1** class(es)..."
+  "assistant_version": "data-analysis-assistant-v2",
+  "reply": "**Student profile from attendance portal data**\n\n- Name: **Example Student**\n- Roll no: **20...000**\n- Degree: **B.Tech.**\n- Department: **MECHANICAL ENGINEERING**\n- Semester: **3**\n- Academic year: **2025-26**\n- Portal photo: **available**"
 }
 ```
+
+Public docs use redacted sample identifiers. Do not paste a real roll number, encrypted portal URL, student ID, or portal screenshot into README/PR text.
 
 ---
 
 ### POST `/api/check_cache`
-**Load previous attendance data (within 5 min cache).** Skip CAPTCHA if cached.
+**Load previous attendance data from local cache.** Skip CAPTCHA if cached.
 
 **Request:**
 ```json
 {
-  "rollno": "2024UME4116"
+  "rollno": "2024ABC0000"
 }
 ```
 
@@ -242,7 +251,10 @@ All endpoints return JSON. Requires `session_id` (except login/cache check).
 {
   "success": true,
   "session_id": "new-uuid",
-  "message": "Loaded from cache"
+  "message": "Loaded from cache",
+  "assistant_version": "data-analysis-assistant-v2",
+  "cache_schema_version": 2,
+  "cache_needs_refresh": false
 }
 ```
 
@@ -262,20 +274,35 @@ All endpoints return JSON. Requires `session_id` (except login/cache check).
 ```json
 {
   "success": true,
-  "analysis": [
-    {
-      "subject": "Mathematics",
-      "attended": 24,
-      "total": 29,
-      "percentage": 82.76,
-      "status_75": "safe",
-      "status_65": "safe",
-      "day_wise": [
-        {"date": "2025-01-15", "status": "Present"},
-        {"date": "2025-01-16", "status": "Absent"}
-      ]
+  "analysis": {
+    "schema_version": 2,
+    "student": {
+      "name": "Example Student",
+      "rollno": "2024ABC0000",
+      "department": "MECHANICAL ENGINEERING",
+      "degree": "B.Tech.",
+      "photo_available": true
+    },
+    "attendance": [
+      {
+        "subject": "Strength of Materials",
+        "code": "MEMEC303",
+        "attended": 37,
+        "total": 49,
+        "absent": 12,
+        "percentage": 75.51,
+        "status_75": "borderline",
+        "status_65": "safe",
+        "absent_dates": ["2025-08-01", "2025-08-04"]
+      }
+    ],
+    "insights": {
+      "overall_percentage": 82.51,
+      "total_attended": 217,
+      "total_classes": 263,
+      "total_absent": 46
     }
-  ]
+  }
 }
 ```
 

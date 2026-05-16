@@ -52,6 +52,12 @@ class ChatbotEngine:
         name = subject.get("subject") or code or "Subject"
         return f"{code} - {name}" if code and code != name else name
 
+    def _mask_identifier(self, value):
+        text = str(value or "").strip()
+        if len(text) <= 4:
+            return text or "Unknown"
+        return f"{text[:2]}...{text[-3:]}"
+
     def _status_word(self, subject):
         status = subject.get("status_75") or subject.get("status") or ""
         if status == "safe":
@@ -250,11 +256,13 @@ class ChatbotEngine:
 
         response = "**Student profile from attendance portal data**\n\n"
         response += f"- Name: **{student.get('name', 'Unknown')}**\n"
-        response += f"- Roll no: **{student.get('rollno', 'Unknown')}**\n"
+        if student.get("rollno"):
+            response += f"- Roll no: **{self._mask_identifier(student.get('rollno'))}**\n"
         response += f"- Degree: **{student.get('degree', 'Unknown')}**\n"
         response += f"- Department: **{student.get('department', 'Unknown')}**\n"
         response += f"- Semester: **{source.get('semester') or student.get('semester', 'Unknown')}**\n"
         response += f"- Academic year: **{source.get('academic_year') or student.get('academic_year', 'Unknown')}**\n"
+        response += f"- Portal photo: **{'available' if student.get('photo_available') else 'not cached'}**\n"
         return response
 
     def _website_report(self, payload):
@@ -313,6 +321,15 @@ class ChatbotEngine:
         payload = self._payload()
         subjects = self._subjects(payload)
 
+        if message_lower in {"codes", "help", "commands", "shortcuts"}:
+            return self._codes()
+
+        if "profile" in message_lower or "student" in message_lower or "photo" in message_lower:
+            return self._profile_report(payload)
+
+        if "website" in message_lower or "available" in message_lower or "portal" in message_lower or "what data" in message_lower:
+            return self._website_report(payload)
+
         if not subjects:
             return "I could not find attendance data yet. Please complete login and CAPTCHA once so I can build the analysis cache."
 
@@ -336,15 +353,6 @@ class ChatbotEngine:
                 response += f"**{index}.** {self._subject_label(subject)} - {subject.get('percentage')}%\n"
             response += "\nType the serial number for day-wise marks, absent dates, and safe-skip analysis."
             return response
-
-        if message_lower in {"codes", "help", "commands", "shortcuts"}:
-            return self._codes()
-
-        if "profile" in message_lower or "student" in message_lower or "photo" in message_lower:
-            return self._profile_report(payload)
-
-        if "website" in message_lower or "available" in message_lower or "portal" in message_lower or "what data" in message_lower:
-            return self._website_report(payload)
 
         if "calendar" in message_lower or "holiday" in message_lower or "leave" in message_lower or "gh" in message_lower or "tl" in message_lower:
             return self._calendar_report(payload)
