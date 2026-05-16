@@ -1,5 +1,7 @@
 let sessionId = null;
 let rollNo = null;
+let autoOcrTried = false;
+let captchaIssuedAt = 0;
 
 const App = {
     init() {
@@ -54,15 +56,16 @@ const App = {
                 <div class="input-group">
                     <input type="password" id="password" placeholder="Password">
                 </div>
-                <div class="input-group">
-                    <input type="text" id="semester" placeholder="Semester (e.g. 4)" value="4">
-                </div>
                 <button id="loginBtn">Connect to Portal</button>
                 <div id="captchaArea" style="display: none; flex-direction: column; gap: 1rem; margin-top: 1rem;">
                     <img id="captchaImg" style="border-radius: 8px; border: 1px solid var(--glass-border);">
                     <input type="text" id="captchaInput" placeholder="Enter Captcha">
-                    <button id="verifyBtn">Verify & Deep Scrape</button>
-                    <small style="color: var(--accent)">Deep scraping may take 10-15 seconds. It will save locally so you only do this once.</small>
+                       <div style="display: flex; gap: 0.5rem;">
+                           <button id="verifyBtn" style="flex: 1;">Verify & Deep Scrape</button>
+                           <button id="autoOcrBtn" title="Use OCR to automatically read CAPTCHA" style="flex: 0; padding: 0.5rem 1rem; background: rgba(100, 200, 255, 0.3); border: 1px solid rgba(100, 200, 255, 0.5); cursor: pointer; border-radius: 8px; color: #64c8ff; font-weight: bold;">🤖 OCR</button>
+                           <button id="refreshCaptchaBtn" title="Refresh to latest CAPTCHA from portal" style="flex: 0; padding: 0.5rem 1rem; background: rgba(255, 220, 120, 0.25); border: 1px solid rgba(255, 220, 120, 0.5); cursor: pointer; border-radius: 8px; color: #ffd166; font-weight: bold;">↻</button>
+                       </div>
+                       <small style="color: var(--accent)">💡 Tip: Use ↻ before entering CAPTCHA to ensure latest image, then Verify. OCR is optional.</small>
                 </div>
             </div>
         `;
@@ -73,30 +76,81 @@ const App = {
             
             const roll = document.getElementById('rollno').value;
             const pwd = document.getElementById('password').value;
-            const sem = document.getElementById('semester').value;
 
             const res = await fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ rollno: roll, password: pwd, semester: sem })
+                body: JSON.stringify({ rollno: roll, password: pwd })
             });
             const data = await res.json();
             
             if (data.success) {
                 sessionId = data.session_id;
-                rollNo = roll;
+                rollNo = data.rollno || roll;
+                autoOcrTried = false;
                 btn.style.display = 'none';
                 document.getElementById('captchaArea').style.display = 'flex';
                 document.getElementById('captchaImg').src = data.captcha_base64;
+                captchaIssuedAt = Date.now();
             } else {
                 btn.innerHTML = 'Connect to Portal';
                 alert(data.message);
             }
         });
 
+        document.getElementById('refreshCaptchaBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('refreshCaptchaBtn');
+            const previous = btn.innerHTML;
+            btn.innerHTML = '...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/captcha/refresh', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_id: sessionId })
+                });
+                const data = await res.json();
+                if (data.success && data.captcha_base64) {
+                    document.getElementById('captchaImg').src = data.captcha_base64;
+                    document.getElementById('captchaInput').value = '';
+                    captchaIssuedAt = Date.now();
+                } else {
+                    const dbg = data.debug_dir ? `\n\nDebug folder: ${data.debug_dir}` : '';
+                    alert((data.message || 'Could not refresh captcha') + dbg);
+                }
+            } catch (e) {
+                alert('Refresh failed: ' + e.message);
+            } finally {
+                btn.innerHTML = previous;
+                btn.disabled = false;
+            }
+        });
+
         document.getElementById('verifyBtn').addEventListener('click', async () => {
             const btn = document.getElementById('verifyBtn');
             btn.innerHTML = '<div class="loader"></div>';
+
+            if (captchaIssuedAt && (Date.now() - captchaIssuedAt) > 45000) {
+                try {
+                    const refreshRes = await fetch('/api/captcha/refresh', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ session_id: sessionId })
+                    });
+                    const refreshData = await refreshRes.json();
+                    if (refreshData.success && refreshData.captcha_base64) {
+                        document.getElementById('captchaImg').src = refreshData.captcha_base64;
+                        document.getElementById('captchaInput').value = '';
+                        captchaIssuedAt = Date.now();
+                        btn.innerHTML = 'Verify & Deep Scrape';
+                        alert('Captcha was refreshed because previous one got old. Please type the new captcha and submit again.');
+                        return;
+                    }
+                } catch (e) {
+                    // fallback to existing flow
+                }
+            }
             
             const cap = document.getElementById('captchaInput').value;
             const res = await fetch('/api/captcha', {
@@ -112,9 +166,49 @@ const App = {
                 this.addBotMessage(data.message);
             } else {
                 btn.innerHTML = 'Verify & Deep Scrape';
-                alert(data.message);
+                if (data.retryable && data.captcha_base64) {
+                    document.getElementById('captchaImg').src = data.captcha_base64;
+                    captchaIssuedAt = Date.now();
+                }
+                const dbg = data.debug_dir ? `\n\nDebug folder: ${data.debug_dir}` : '';
+                alert((data.message || 'Verification failed') + dbg);
             }
         });
+       
+           document.getElementById('autoOcrBtn').addEventListener('click', async () => {
+               const btn = document.getElementById('autoOcrBtn');
+               const originalText = btn.innerHTML;
+               btn.innerHTML = '⏳ Reading...';
+               btn.disabled = true;
+           
+               try {
+                   const res = await fetch('/api/captcha', {
+                       method: 'POST',
+                       headers: { 'Content-Type': 'application/json' },
+                       body: JSON.stringify({ session_id: sessionId, auto_ocr: true })
+                   });
+                   const data = await res.json();
+               
+                   if (data.success) {
+                       localStorage.setItem('nsut_rollno', rollNo);
+                       this.renderChat();
+                       this.addBotMessage("✓ CAPTCHA auto-read with OCR! " + data.message);
+                   } else {
+                       btn.innerHTML = originalText;
+                       btn.disabled = false;
+                       if (data.retryable && data.captcha_base64) {
+                           document.getElementById('captchaImg').src = data.captcha_base64;
+                           captchaIssuedAt = Date.now();
+                       }
+                       const dbg = data.debug_dir ? `\n\nDebug folder: ${data.debug_dir}` : '';
+                       alert("❌ OCR failed: " + data.message + "\n\nYou can retry OCR or enter CAPTCHA manually without re-login." + dbg);
+                   }
+               } catch (e) {
+                   btn.innerHTML = originalText;
+                   btn.disabled = false;
+                   alert("❌ Error: " + e.message);
+               }
+           });
     },
 
     renderChat() {

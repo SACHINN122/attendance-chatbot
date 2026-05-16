@@ -1,0 +1,7 @@
+- generic [ref=e3]:
+  - heading "NSUT Smart Portal" [level=1] [ref=e4]
+  - paragraph [ref=e5]: Login to analyze your attendance.
+  - textbox "Roll No (e.g. 2024UME4116)" [ref=e7]
+  - textbox "Password" [ref=e9]
+  - textbox "Semester (e.g. 4)" [ref=e11]: "4"
+  - button "Connect to Portal" [ref=e12] [cursor=pointer]

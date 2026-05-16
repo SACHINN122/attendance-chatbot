@@ -1,32 +1,396 @@
-# NSUT Attendance Chatbot V2
+# Kairon: NSUT Smart Attendance Assistant 🎓
 
-A smart, automated attendance scraper and chatbot interface for the NSUT student portal. 
-
-It uses Playwright to natively navigate the portal, bypass captcha, and mathematically extract day-wise attendance data (bypassing all frontend CSS/JS hiding tricks), providing intelligent leave predictions through a beautiful glassmorphism UI.
+An intelligent attendance analytics chatbot for NSUT that predicts leave eligibility and provides insights into your attendance patterns using web scraping and conversational AI.
 
 ---
 
-## 🛠️ Local Setup
+## 🎯 Why This Architecture?
 
-Since the frontend is directly served by the Flask backend, you only need to run one server!
+### Why Playwright over Selenium?
+- **Performance:** Playwright is 2-3x faster than Selenium for modern web apps
+- **Better Frame Handling:** Seamlessly navigates complex frame structures (like the NSUT portal's banner/data frames)
+- **Built-in Captcha Support:** Easy screenshot capture for headless automation
+- **Multi-language:** Works with Python, Node.js, Java, .NET (we use Python)
+- **Sync & Async:** We use sync API for simplicity; async available for scaling
 
-1. **Install Python dependencies:**
-   Navigate to the `backend` folder and run:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Why Captcha Required?
+The NSUT portal enforces CAPTCHA to prevent automated abuse. Our flow:
+1. User submits roll number + password
+2. Backend loads the NSUT login form (framed)
+3. Playwright captures the CAPTCHA image & sends to frontend
+4. User solves CAPTCHA in the UI
+5. Backend submits CAPTCHA + credentials → scrapes attendance data
+6. Results cached for 5 minutes to avoid repeated logins
 
-2. **Install Playwright Browsers:**
-   This is required for the bot to navigate the portal in the background:
-   ```bash
-   playwright install chromium
-   ```
+### Architecture Overview
+```
+┌─────────────┐                    ┌──────────────────┐
+│   Frontend  │◄──── JSON API ────►│  Flask Backend   │
+│  (HTML/JS)  │                    │  (app.py)        │
+└─────────────┘                    └──────────────────┘
+                                            │
+                                    ┌───────▼────────┐
+                                    │   Scraper      │
+                                    │ (playwright,   │
+                                    │  beautifulsoup)│
+                                    └────────────────┘
+                                            │
+                                            ▼
+                                    ┌──────────────────┐
+                                    │ NSUT Portal      │
+                                    │ (framed structure)
+                                    └──────────────────┘
+```
 
-3. **Start the App:**
-   ```bash
-   python app.py
-   ```
-   Open `http://127.0.0.1:5000` in your browser.
+---
+
+## 📦 Project Structure
+
+```
+Kairon/
+├── README.md                    # This file
+├── requirements.txt             # Project dependencies
+├── .env                         # Credentials (DO NOT COMMIT)
+│
+├── backend/
+│   ├── app.py                   # Flask API routes
+│   ├── scraper.py               # Web scraper (Playwright/BeautifulSoup)
+│   ├── chatbot.py               # Chatbot Q&A engine
+│   ├── playwright_manager.py    # Playwright lifecycle manager
+│   ├── logging_config.py        # Structured logging setup
+│   ├── requirements.txt         # Backend-specific dependencies
+│   └── data/                    # Cached attendance JSON files
+│
+├── frontend/
+│   ├── index.html               # Main UI
+│   ├── style.css                # Styling
+│   └── js/
+│       └── app.js               # Frontend logic
+│
+├── css/
+│   └── main.css                 # Shared CSS
+│
+└── .venv/                       # Python virtual environment (gitignored)
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.12+
+- macOS / Linux / Windows (with WSL2)
+
+### 1️⃣ Clone & Navigate to Project
+
+```bash
+cd /Volumes/algsoch/sachin/Kairon
+```
+
+### 2️⃣ Create & Activate Virtual Environment
+
+```bash
+# Create a Python 3.12 virtual environment
+python3.12 -m venv .venv
+
+# Activate it
+source .venv/bin/activate
+
+# On Windows:
+# .venv\Scripts\activate
+```
+
+### 3️⃣ Bootstrap pip (if needed)
+
+```bash
+# Ensure pip is installed in the venv
+.venv/bin/python -m ensurepip --upgrade
+.venv/bin/python -m pip install --upgrade pip setuptools wheel
+```
+
+### 4️⃣ Install Dependencies
+
+```bash
+# Install all project requirements
+.venv/bin/python -m pip install -r requirements.txt
+
+# Download Playwright browsers (required for scraping)
+.venv/bin/python -m playwright install chromium
+```
+
+### 5️⃣ Set Up Credentials
+
+Create a `.env` file in the project root:
+
+```bash
+cat > .env << 'EOF'
+roll_no=YOUR_ROLL_NUMBER
+password=YOUR_PASSWORD
+EOF
+```
+
+**⚠️ WARNING:** Do NOT commit `.env` to Git. It's already in `.gitignore`.
+
+### 6️⃣ Run the Server
+
+```bash
+cd backend
+../.venv/bin/python app.py
+```
+
+You should see:
+
+```
+ * Serving Flask app 'app'
+ * Debug mode: on
+ * Running on http://127.0.0.1:5000
+```
+
+### 7️⃣ Open in Browser
+
+Navigate to **http://127.0.0.1:5000** and log in with your NSUT credentials.
+
+---
+
+## 🔑 API Endpoints
+
+All endpoints return JSON. Requires `session_id` (except login/cache check).
+
+### POST `/api/login`
+**Start login flow.** Frontend sends roll number + password; backend captures CAPTCHA.
+
+**Request:**
+```json
+{
+  "rollno": "2024UME4116",
+  "password": "your_password",
+  "semester": "4"
+}
+```
+
+**Response (Success):**
+```json
+{
+  "success": true,
+  "session_id": "uuid-string",
+  "captcha_base64": "data:image/png;base64,..."
+}
+```
+
+**Next Step:** User solves CAPTCHA & calls `/api/captcha`.
+
+---
+
+### POST `/api/captcha`
+**Submit CAPTCHA solution & scrape attendance.**
+
+**Request:**
+```json
+{
+  "session_id": "uuid-string",
+  "captcha": "ABC123"
+}
+```
+
+**Response (Success):**
+```json
+{
+  "success": true,
+  "message": "Login successful! I've fetched your attendance data..."
+}
+```
+
+---
+
+### POST `/api/chat`
+**Chat with the attendance assistant.** Try:
+- `"hi"` → Full attendance summary (75% & 65% thresholds)
+- `"sw"` → Subject-wise detailed view
+- `"danger"` → Show low-attendance subjects
+- `"safe"` → Show subjects you can skip
+- `"subject_name"` → Details for a specific subject
+
+**Request:**
+```json
+{
+  "session_id": "uuid-string",
+  "message": "hi"
+}
+```
+
+**Response:**
+```json
+{
+  "reply": "📊 **Table 1: Leave Prediction — 75% Threshold**\n\n🟢 **Mathematics**: 82% (24/29) — Can skip **1** class(es)..."
+}
+```
+
+---
+
+### POST `/api/check_cache`
+**Load previous attendance data (within 5 min cache).** Skip CAPTCHA if cached.
+
+**Request:**
+```json
+{
+  "rollno": "2024UME4116"
+}
+```
+
+**Response (if cache exists):**
+```json
+{
+  "success": true,
+  "session_id": "new-uuid",
+  "message": "Loaded from cache"
+}
+```
+
+---
+
+### POST `/api/analysis`
+**Get raw attendance analysis (JSON).**
+
+**Request:**
+```json
+{
+  "session_id": "uuid-string"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "analysis": [
+    {
+      "subject": "Mathematics",
+      "attended": 24,
+      "total": 29,
+      "percentage": 82.76,
+      "status_75": "safe",
+      "status_65": "safe",
+      "day_wise": [
+        {"date": "2025-01-15", "status": "Present"},
+        {"date": "2025-01-16", "status": "Absent"}
+      ]
+    }
+  ]
+}
+```
+
+---
+
+## 📝 Server Logs
+
+The server logs all endpoint access with request/response details:
+
+```
+[INFO] POST /api/login | Status: 200 | Duration: 8.45s
+[INFO] POST /api/captcha | Status: 200 | Duration: 15.32s
+[INFO] POST /api/chat | Status: 200 | Duration: 0.12s
+[ERROR] POST /api/login | Status: 401 | Reason: Invalid credentials
+```
+
+---
+
+## 🧪 Testing
+
+### Mock Mode (No CAPTCHA, No NSUT Portal Needed)
+
+Edit `backend/app.py`, in the `login()` function, change:
+
+```python
+scraper = AttendanceScraper(use_mock=False)
+```
+
+to:
+
+```python
+scraper = AttendanceScraper(use_mock=True)
+```
+
+Then restart the server. Mock logins return instant results without contacting NSUT.
+
+### Run Tests (Pytest)
+
+```bash
+cd backend
+../.venv/bin/python -m pytest test_scraper.py -v
+```
+
+---
+
+## 🔧 Development
+
+### File Structure for Features
+
+1. **New scraper logic?** → Add to `backend/scraper.py` → `AttendanceScraper` class
+2. **New chatbot features?** → Add to `backend/chatbot.py` → `ChatbotEngine` class
+3. **New API route?** → Add to `backend/app.py` → Register with `@app.route()`
+4. **Frontend logic?** → Edit `frontend/js/app.js`
+
+### Enable Debug Logging
+
+Set in `backend/app.py`:
+
+```python
+import logging
+logging.basicConfig(level=logging.DEBUG)
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### "ModuleNotFoundError: No module named 'bs4'"
+- Activate venv: `source .venv/bin/activate`
+- Reinstall deps: `.venv/bin/python -m pip install -r requirements.txt`
+
+### "Playwright browser failed to start"
+- Run: `.venv/bin/python -m playwright install chromium`
+- Verify: `.venv/bin/python -c "from playwright.sync_api import sync_playwright; sync_playwright().start()"`
+
+### "Could not find the login form"
+- NSUT portal may be down or changed structure
+- Check: Visit https://www.imsnsit.org/imsnsit/ manually
+- Debug screenshot saved as `debug_menu_final.png` in `backend/` (on error)
+
+### "Session expired" (401 error)
+- Sessions last 5 minutes
+- Re-login from scratch: POST to `/api/login` again
+
+### Port 5000 Already in Use
+```bash
+# Kill process using port 5000
+lsof -i :5000 | grep LISTEN | awk '{print $2}' | xargs kill -9
+
+# Or use different port in app.py:
+# app.run(port=5001)
+```
+
+---
+
+## 📊 Architecture Diagram
+
+See diagram below (generated with Mermaid)
+
+---
+
+## 📚 Key Concepts
+
+### Session Management
+Each user gets a unique `session_id` UUID. The server maintains active sessions for 5 minutes before cleanup.
+
+### Caching
+Attendance data is cached per user (rollno) in `backend/data/<rollno>.json`. Check cache before re-scraping.
+
+### Day-Wise Attendance
+After initial scrape, the bot clicks on subject links to fetch per-day attendance records (Present/Absent for each date).
+
+### Attendance Thresholds
+- **75%:** Default threshold (most strict) — minimum for eligibility
+- **65%:** Extended threshold (more lenient) — backup option
 
 ---
 
@@ -47,6 +411,20 @@ Make sure all your code (including `render.yaml`, `requirements.txt`, and the fr
 3. Connect your GitHub repository.
 4. Render will automatically detect the `render.yaml` file and configure everything for you (Build Commands, Start Commands, and Environment Variables).
 5. Click **Apply**!
+
+---
+
+## 📄 License
+
+MIT License. See LICENSE file (if present).
+
+---
+
+## ✉️ Support
+
+For issues, check logs or raise an issue in the repository.
+
+**Happy learning!** 🚀
 
 *Note: The first deployment might take 2-4 minutes because it has to download and install the Chromium browser in the cloud.*
 

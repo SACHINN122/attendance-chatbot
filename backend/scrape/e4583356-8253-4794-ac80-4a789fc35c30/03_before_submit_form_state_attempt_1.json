@@ -1,0 +1,8 @@
+{
+  "url": "https://www.imsnsit.org/imsnsit/student_login.php",
+  "uid_len": 11,
+  "pwd_len": 8,
+  "cap_len": 5,
+  "hrand": "16149",
+  "captcha_src": "images/captcha/captcha_1778929580.jpg"
+}
