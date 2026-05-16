@@ -18,9 +18,12 @@ const App = {
     async loadConfig() {
         try {
             const res = await fetch('/api/config');
+            if (!res.ok) {
+                throw new Error('Backend config endpoint unavailable');
+            }
             appConfig = await res.json();
         } catch (e) {
-            appConfig = {};
+            appConfig = { backend_stale: true };
         }
     },
 
@@ -44,8 +47,11 @@ const App = {
             if (data.success) {
                 sessionId = data.session_id;
                 rollNo = rollno;
-                this.renderChat();
-                this.addBotMessage("Welcome back! I've loaded your attendance from the local cache. \n\nType **HI** for a summary or **SW** for subject-wise details.");
+                this.renderChat(data.analysis);
+                const cacheNote = data.cache_needs_refresh
+                    ? "\n\n**Cache note:** this is an older totals-only cache. Type **TOTAL**, **SAFE**, or **RISK** now, but login once with CAPTCHA to rebuild the v2 cache for absent dates, profile, calendar marks, and portal data surfaces."
+                    : "";
+                this.addBotMessage("Welcome back! I've loaded your attendance from the local cache." + cacheNote + "\n\nType **HI** for a summary, **CODES** for shortcuts, or **SW** for subject-wise details.");
             } else {
                 this.renderLogin(rollno);
             }
@@ -249,8 +255,9 @@ const App = {
     renderChat(analysis = null) {
         const insights = analysis && analysis.insights ? analysis.insights : null;
         const student = analysis && analysis.student ? analysis.student : {};
+        const source = analysis && analysis.source ? analysis.source : {};
         const headerMeta = insights
-            ? `${insights.overall_percentage || 0}% - ${insights.total_attended || 0}/${insights.total_classes || 0} - ${insights.total_absent || 0} absent`
+            ? `${insights.overall_percentage || 0}% - ${insights.total_attended || 0}/${insights.total_classes || 0} - ${insights.total_absent || 0} absent${source.legacy_cache ? ' - legacy cache' : ''}`
             : 'Smart attendance workspace';
         const studentName = student.name || rollNo || 'Attendance Assistant';
 

@@ -13,7 +13,11 @@ class ChatbotEngine:
                 "attendance": data,
                 "insights": self._legacy_insights(data),
                 "portal": {},
-                "source": {},
+                "source": {
+                    "cache_schema_version": 1,
+                    "legacy_cache": True,
+                    "note": "This cache was created before v2 day-wise portal extraction.",
+                },
             }
         return data or {
             "student": {},
@@ -97,6 +101,12 @@ class ChatbotEngine:
             f"Subjects tracked: **{insights.get('subject_count', len(subjects))}**. "
             f"Safe skips at 75%: **{insights.get('total_skippable_75', 0)}**.\n\n"
         )
+        if source.get("legacy_cache"):
+            response += (
+                "**Cache note:** this is an older totals-only cache. "
+                "The shortcut commands work, but date-wise absences, portal profile fields, "
+                "calendar marks, and website-surface mapping need one fresh portal login to rebuild the v2 cache.\n\n"
+            )
 
         lowest = insights.get("lowest_subject")
         strongest = insights.get("strongest_subject")
@@ -199,7 +209,24 @@ class ChatbotEngine:
         insights = payload.get("insights") or {}
         absences = insights.get("recent_absences") or []
         if not absences:
-            return "No detailed absence dates were found in the current cached attendance grid."
+            subjects = self._subjects(payload)
+            response = f"Total absent classes: **{insights.get('total_absent', 0)}**.\n\n"
+            if subjects:
+                response += "| Subject | Absent | Attendance |\n|:---|---:|:---|\n"
+                for subject in subjects:
+                    absent = subject.get("absent", max(subject.get("total", 0) - subject.get("attended", 0), 0))
+                    response += (
+                        f"| {self._subject_label(subject)} | {absent} | "
+                        f"{subject.get('percentage', 0)}% ({subject.get('attended', 0)}/{subject.get('total', 0)}) |\n"
+                    )
+            if (payload.get("source") or {}).get("legacy_cache"):
+                response += (
+                    "\nThis local cache is legacy totals-only, so exact absent dates are not stored. "
+                    "Login once with the current scraper to rebuild the v2 cache with day-wise absence dates."
+                )
+            else:
+                response += "\nNo detailed absence dates were found in the current cached attendance grid."
+            return response
 
         response = f"Total absent classes: **{insights.get('total_absent', 0)}**.\n\n"
         response += "| Date | Subject | Count | Raw |\n|:---|:---|---:|:---|\n"
@@ -211,6 +238,11 @@ class ChatbotEngine:
         student = payload.get("student") or {}
         source = payload.get("source") or {}
         if not student:
+            if source.get("legacy_cache"):
+                return (
+                    "This cache was created by the old totals-only scraper, so it does not contain profile/photo fields. "
+                    "Fresh login with the v2 scraper will keep attendance plus student/profile surfaces in the analysis payload."
+                )
             return "I only have attendance data in cache right now. The portal menu shows profile and ID-card pages, so the next scrape can attach personal/photo data when those pages are fetched."
 
         response = "**Student profile from attendance portal data**\n\n"
