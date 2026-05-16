@@ -45,6 +45,12 @@ if not os.path.exists(DATA_DIR):
 # Map session_id -> { "scraper": AttendanceScraper(), "chatbot": ChatbotEngine() }
 user_sessions = {}
 
+def _default_rollno():
+    return os.getenv('roll_no') or os.getenv('ROLL_NO') or ""
+
+def _default_password():
+    return os.getenv('password') or os.getenv('PASSWORD') or ""
+
 @app.route('/')
 def serve_index():
     return send_from_directory(FRONTEND_DIR, 'index.html')
@@ -53,13 +59,28 @@ def serve_index():
 def serve_static(filename):
     return send_from_directory(FRONTEND_DIR, filename)
 
+@app.route('/api/config', methods=['GET'])
+def config():
+    rollno = _default_rollno()
+    cache_file = os.path.join(DATA_DIR, f"{rollno}.json") if rollno else ""
+    return jsonify({
+        "default_rollno": rollno,
+        "has_saved_password": bool(_default_password()),
+        "has_cached_data": bool(cache_file and os.path.exists(cache_file)),
+    })
+
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.json or {}
-    rollno = data.get('rollno') or os.getenv('roll_no') or os.getenv('ROLL_NO')
-    password = data.get('password') or os.getenv('password') or os.getenv('PASSWORD')
+    rollno = data.get('rollno') or _default_rollno()
+    password = data.get('password') or _default_password()
     if not rollno or not password:
-        return jsonify({"success": False, "message": "rollno and password are required"}), 400
+        missing = "roll number" if not rollno else "password"
+        return jsonify({
+            "success": False,
+            "message": f"{missing} required. Enter it once or set it in .env.",
+            "needs_password": not bool(password),
+        }), 400
     
     scraper = AttendanceScraper(use_mock=False)
     result = scraper.start_login(rollno, password)
@@ -78,8 +99,8 @@ def login():
 
 @app.route('/api/check_cache', methods=['POST'])
 def check_cache():
-    data = request.json
-    rollno = data.get('rollno')
+    data = request.json or {}
+    rollno = data.get('rollno') or _default_rollno()
     
     if not rollno:
         return jsonify({"success": False, "message": "Roll number required"})
@@ -214,7 +235,7 @@ def _find_available_port(preferred_port):
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    data = request.json
+    data = request.json or {}
     session_id = data.get('session_id')
     user_message = data.get('message', '')
     
@@ -228,7 +249,7 @@ def chat():
 
 @app.route('/api/analysis', methods=['POST'])
 def analysis():
-    data = request.json
+    data = request.json or {}
     session_id = data.get('session_id')
     if not session_id or session_id not in user_sessions:
         return jsonify({"success": False, "message": "Invalid or missing session_id"}), 401

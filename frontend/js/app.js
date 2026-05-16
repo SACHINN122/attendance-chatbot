@@ -2,15 +2,34 @@ let sessionId = null;
 let rollNo = null;
 let autoOcrTried = false;
 let captchaIssuedAt = 0;
+let appConfig = {};
 
 const App = {
-    init() {
-        const savedRollNo = localStorage.getItem('nsut_rollno');
+    async init() {
+        await this.loadConfig();
+        const savedRollNo = localStorage.getItem('nsut_rollno') || appConfig.default_rollno || '';
         if (savedRollNo) {
             this.checkCache(savedRollNo);
         } else {
             this.renderLogin();
         }
+    },
+
+    async loadConfig() {
+        try {
+            const res = await fetch('/api/config');
+            appConfig = await res.json();
+        } catch (e) {
+            appConfig = {};
+        }
+    },
+
+    escapeAttr(value) {
+        return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
     },
 
     async checkCache(rollno) {
@@ -28,11 +47,10 @@ const App = {
                 this.renderChat();
                 this.addBotMessage("Welcome back! I've loaded your attendance from the local cache. \n\nType **HI** for a summary or **SW** for subject-wise details.");
             } else {
-                localStorage.removeItem('nsut_rollno');
-                this.renderLogin();
+                this.renderLogin(rollno);
             }
         } catch (e) {
-            this.renderLogin();
+            this.renderLogin(rollno);
         }
     },
 
@@ -45,17 +63,27 @@ const App = {
         `;
     },
 
-    renderLogin() {
+    renderLogin(initialRoll = '') {
+        const savedPassword = localStorage.getItem('nsut_portal_password') || '';
+        const passwordPlaceholder = appConfig.has_saved_password ? 'Password saved in .env' : 'Password';
+        const savedPasswordChecked = savedPassword ? 'checked' : '';
+        const savedPasswordValue = this.escapeAttr(savedPassword);
+        const savedRollValue = this.escapeAttr(initialRoll || localStorage.getItem('nsut_rollno') || appConfig.default_rollno || '');
+
         document.getElementById('app').innerHTML = `
             <div class="glass-panel auth-container">
-                <h1>NSUT Smart Portal</h1>
-                <p style="color: var(--text-secondary)">Login to analyze your attendance.</p>
+                <h1>Attendance Assistant</h1>
+                <p style="color: var(--text-secondary)">Connect once, then use the cached assistant workspace.</p>
                 <div class="input-group">
-                    <input type="text" id="rollno" placeholder="Roll No (e.g. 2024UME4116)">
+                    <input type="text" id="rollno" placeholder="Roll No (e.g. 2024UME4116)" value="${savedRollValue}">
                 </div>
                 <div class="input-group">
-                    <input type="password" id="password" placeholder="Password">
+                    <input type="password" id="password" placeholder="${passwordPlaceholder}" value="${savedPasswordValue}">
                 </div>
+                <label class="check-row">
+                    <input type="checkbox" id="rememberPassword" ${savedPasswordChecked}>
+                    <span>Remember password on this device</span>
+                </label>
                 <button id="loginBtn">Connect to Portal</button>
                 <div id="captchaArea" style="display: none; flex-direction: column; gap: 1rem; margin-top: 1rem;">
                     <img id="captchaImg" style="border-radius: 8px; border: 1px solid var(--glass-border);">
@@ -76,6 +104,7 @@ const App = {
             
             const roll = document.getElementById('rollno').value;
             const pwd = document.getElementById('password').value;
+            const rememberPassword = document.getElementById('rememberPassword').checked;
 
             const res = await fetch('/api/login', {
                 method: 'POST',
@@ -87,6 +116,12 @@ const App = {
             if (data.success) {
                 sessionId = data.session_id;
                 rollNo = data.rollno || roll;
+                localStorage.setItem('nsut_rollno', rollNo);
+                if (rememberPassword && pwd) {
+                    localStorage.setItem('nsut_portal_password', pwd);
+                } else if (!rememberPassword) {
+                    localStorage.removeItem('nsut_portal_password');
+                }
                 autoOcrTried = false;
                 btn.style.display = 'none';
                 document.getElementById('captchaArea').style.display = 'flex';
@@ -162,8 +197,8 @@ const App = {
             
             if (data.success) {
                 localStorage.setItem('nsut_rollno', rollNo);
-                this.renderChat();
-                this.addBotMessage(data.message);
+                this.renderChat(data.data);
+                this.addBotMessage(data.message + "\n\nType **HI** for the full dashboard, **CODES** for shortcuts, or ask a subject code like **MEMEC303**.");
             } else {
                 btn.innerHTML = 'Verify & Deep Scrape';
                 if (data.retryable && data.captcha_base64) {
@@ -191,8 +226,8 @@ const App = {
                
                    if (data.success) {
                        localStorage.setItem('nsut_rollno', rollNo);
-                       this.renderChat();
-                       this.addBotMessage("✓ CAPTCHA auto-read with OCR! " + data.message);
+                       this.renderChat(data.data);
+                       this.addBotMessage("CAPTCHA auto-read with OCR. " + data.message + "\n\nType **HI** for the full dashboard or **CODES** for shortcuts.");
                    } else {
                        btn.innerHTML = originalText;
                        btn.disabled = false;
@@ -211,14 +246,33 @@ const App = {
            });
     },
 
-    renderChat() {
+    renderChat(analysis = null) {
+        const insights = analysis && analysis.insights ? analysis.insights : null;
+        const student = analysis && analysis.student ? analysis.student : {};
+        const headerMeta = insights
+            ? `${insights.overall_percentage || 0}% - ${insights.total_attended || 0}/${insights.total_classes || 0} - ${insights.total_absent || 0} absent`
+            : 'Smart attendance workspace';
+        const studentName = student.name || rollNo || 'Attendance Assistant';
+
         document.getElementById('app').innerHTML = `
             <div class="glass-panel chat-container">
                 <div class="chat-header">
-                    <h2 style="margin: 0; font-size: 1.2rem;">Attendance Assistant</h2>
+                    <div>
+                        <h2 style="margin: 0; font-size: 1.2rem;">${studentName}</h2>
+                        <div class="chat-subtitle">${headerMeta}</div>
+                    </div>
                     <button id="logoutBtn" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: rgba(255,255,255,0.1); border-radius: 8px; color: white; border: none; cursor: pointer;">Log Out</button>
                 </div>
                 <div class="chat-messages" id="chatMessages"></div>
+                <div class="quick-actions">
+                    <button class="quick-chip" data-message="HI">HI</button>
+                    <button class="quick-chip" data-message="SW">SW</button>
+                    <button class="quick-chip" data-message="TOTAL">TOTAL</button>
+                    <button class="quick-chip" data-message="ABSENT">ABSENT</button>
+                    <button class="quick-chip" data-message="SAFE">SAFE</button>
+                    <button class="quick-chip" data-message="RISK">RISK</button>
+                    <button class="quick-chip" data-message="PROFILE">PROFILE</button>
+                </div>
                 <div class="chat-input-area">
                     <input type="text" id="chatInput" placeholder="Type HI for summary, SW for subject-wise...">
                     <button id="sendBtn">Send</button>
@@ -227,8 +281,8 @@ const App = {
         `;
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
-            localStorage.removeItem('nsut_rollno');
-            this.renderLogin();
+            sessionId = null;
+            this.renderLogin(rollNo);
         });
 
         const sendMsg = async () => {
@@ -255,6 +309,12 @@ const App = {
         document.getElementById('sendBtn').addEventListener('click', sendMsg);
         document.getElementById('chatInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMsg();
+        });
+        document.querySelectorAll('.quick-chip').forEach((button) => {
+            button.addEventListener('click', () => {
+                document.getElementById('chatInput').value = button.dataset.message;
+                sendMsg();
+            });
         });
     },
 

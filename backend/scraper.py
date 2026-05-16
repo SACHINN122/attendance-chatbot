@@ -22,6 +22,7 @@ class AttendanceScraper:
     def __init__(self, use_mock=False):
         self.use_mock = use_mock
         self.cached_analysis = None
+        self._last_attendance_payload = {}
         self.debug_root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scrape")
         os.makedirs(self.debug_root, exist_ok=True)
 
@@ -541,6 +542,8 @@ class AttendanceScraper:
                 }
             
             self._ensure_activity_menu_loaded(page, debug_dir, attempt_no)
+            portal_catalog = self._extract_portal_catalog(page)
+            self._write_debug_json(debug_dir, f"06_portal_catalog_attempt_{attempt_no}.json", portal_catalog)
 
             # STEP 3: Find "My Attendance" link (critical - frames may have changed)
             attendance_link = self._find_attendance_link(page)
@@ -626,11 +629,16 @@ class AttendanceScraper:
                         subject["day_wise"] = self._parse_day_wise_html(popup_html)
                         popup.close()
                     except:
-                        subject["day_wise"] = []
+                        subject.setdefault("day_wise", [])
                 else:
-                    subject["day_wise"] = []
+                    subject.setdefault("day_wise", [])
             
-            self.cached_analysis = self._compute_full_analysis(attendance_data)
+            attendance_payload = getattr(self, "_last_attendance_payload", {}) or {}
+            self.cached_analysis = self._compute_full_analysis(
+                attendance_data,
+                attendance_payload=attendance_payload,
+                portal_catalog=portal_catalog,
+            )
             self._write_debug_json(debug_dir, f"12_final_analysis_attempt_{attempt_no}.json", self.cached_analysis)
             self.close_session(session_id)
             return {"success": True, "message": "✓ Attendance synced!"}
@@ -927,6 +935,10 @@ class AttendanceScraper:
 
                 attendance_data = self._parse_attendance_html(last_html)
                 if attendance_data:
+                    attendance_payload = getattr(self, "_last_attendance_payload", {}) or {}
+                    attendance_payload["selected_year"] = year
+                    attendance_payload["selected_semester"] = semester
+                    self._last_attendance_payload = attendance_payload
                     self._write_debug_text(debug_dir, f"09_attendance_form_html_attempt_{attempt_no}.html", last_html)
                     self._write_debug_json(
                         debug_dir,
@@ -1069,6 +1081,73 @@ class AttendanceScraper:
         except Exception as e:
             self._write_debug_text(debug_dir, f"06_my_activities_nav_error_attempt_{attempt_no}.txt", str(e))
             return False
+
+    def _extract_portal_catalog(self, page):
+        """Extract a safe inventory of authenticated portal sections and links."""
+        catalog = {
+            "sections": [],
+            "links": [],
+            "data_surfaces": [],
+        }
+        seen_sections = set()
+        seen_links = set()
+
+        try:
+            for frame in page.frames:
+                try:
+                    soup = BeautifulSoup(frame.content(), "html.parser")
+                except:
+                    continue
+
+                frame_text = self._visible_text(str(soup)).lower()
+                if "my attendance" not in frame_text and "my timetable" not in frame_text and "my profile" not in frame_text:
+                    continue
+
+                active_section = None
+                for node in soup.find_all(["b", "a"]):
+                    if node.name == "b":
+                        section = " ".join(node.get_text(" ", strip=True).split()).strip(" :")
+                        if section and len(section) <= 80:
+                            active_section = section
+                            key = section.lower()
+                            if key not in seen_sections:
+                                seen_sections.add(key)
+                                catalog["sections"].append(section)
+                        continue
+
+                    text = " ".join(node.get_text(" ", strip=True).split()).strip()
+                    if not text:
+                        image = node.find("img")
+                        text = (image.get("title") or image.get("alt") or "").strip() if image else ""
+                    if not text:
+                        continue
+
+                    key = (active_section or "", text.lower())
+                    if key in seen_links:
+                        continue
+                    seen_links.add(key)
+                    catalog["links"].append({
+                        "section": active_section or "Portal",
+                        "text": text,
+                        "target": node.get("target") or "",
+                    })
+        except:
+            pass
+
+        important = {
+            "profile": ["my profile", "personal", "id card"],
+            "attendance": ["my attendance", "current sem courses"],
+            "timetable": ["my timetable", "class timetable", "faculty timetable", "roomtimetable", "labtimetable"],
+            "exams": ["admit card", "marks", "results", "grade card", "transcript"],
+            "fees": ["fee"],
+            "library": ["received books"],
+            "requests": ["request", "certificate"],
+        }
+        for surface, markers in important.items():
+            if any(any(marker in link["text"].lower() for marker in markers) for link in catalog["links"]):
+                catalog["data_surfaces"].append(surface)
+
+        return catalog
 
     def _click_portal_anchor(self, frame, link_info):
         """Click a portal anchor from inside its own frame so target/referrer are preserved."""
@@ -1269,7 +1348,83 @@ class AttendanceScraper:
             return None
 
 
-    def _parse_attendance_html(self, html_content):
+    def _attendance_year_for_month(self, month_abbr, academic_year):
+        month = (month_abbr or "")[:3].title()
+        if not academic_year or "-" not in academic_year:
+            return None
+
+        try:
+            start_text, end_text = academic_year.split("-", 1)
+            start_year = int(start_text)
+            end_year = int(str(start_year)[:2] + end_text) if len(end_text) == 2 else int(end_text)
+            return start_year if month in {"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"} else end_year
+        except:
+            return None
+
+    def _normalize_attendance_date(self, day_text, academic_year):
+        match = re.match(r"^([A-Za-z]{3})-(\d{1,2})$", str(day_text or "").strip())
+        if not match:
+            return None
+
+        month_abbr, day = match.groups()
+        year = self._attendance_year_for_month(month_abbr, academic_year)
+        if not year:
+            return None
+
+        try:
+            parsed = datetime.strptime(f"{year}-{month_abbr.title()}-{int(day):02d}", "%Y-%b-%d")
+            return parsed.strftime("%Y-%m-%d")
+        except:
+            return None
+
+    def _attendance_cell_counts(self, raw_value):
+        raw = " ".join(str(raw_value or "").replace("\xa0", " ").split())
+        tokens = [token.strip().upper() for token in raw.split("+") if token.strip()]
+        present = sum(1 for token in tokens if token == "1")
+        absent = sum(1 for token in tokens if token == "0")
+        special = [token for token in tokens if token not in {"0", "1"}]
+
+        if absent and present:
+            status = "mixed"
+        elif absent:
+            status = "absent"
+        elif present:
+            status = "present"
+        elif special:
+            status = "special"
+        else:
+            status = "empty"
+
+        return {
+            "raw": raw,
+            "tokens": tokens,
+            "present_count": present,
+            "absent_count": absent,
+            "special_count": len(special),
+            "special_codes": special,
+            "class_count": present + absent,
+            "status": status,
+        }
+
+    def _parse_special_notes(self, soup):
+        notes = {}
+        note_pattern = re.compile(
+            r"([A-Z][A-Z0-9]+)\s*-+>\s*(\d{2}-\d{2}-\d{4})\s*-+>\s*([A-Z]+)\s*-\s*([^\n\r]+)"
+        )
+        for match in note_pattern.finditer(soup.get_text("\n", strip=True)):
+            code, date_text, mark, description = match.groups()
+            try:
+                parsed_date = datetime.strptime(date_text, "%d-%m-%Y").strftime("%Y-%m-%d")
+            except:
+                parsed_date = date_text
+            notes.setdefault(code, []).append({
+                "date": parsed_date,
+                "mark": mark,
+                "description": " ".join(description.split()),
+            })
+        return notes
+
+    def _parse_attendance_payload(self, html_content):
         soup = BeautifulSoup(html_content or "", "html.parser")
 
         def clean(text):
@@ -1286,9 +1441,47 @@ class AttendanceScraper:
             match = re.search(r"\d+(?:\.\d+)?", clean(value))
             return float(match.group(0)) if match else 0.0
 
+        def selected_value(selector):
+            tag = soup.select_one(selector)
+            if not tag:
+                return None
+            selected = tag.find("option", selected=True)
+            return (selected.get("value") or selected.get_text(" ", strip=True)).strip() if selected else None
+
+        payload = {
+            "student": {},
+            "subjects": [],
+            "status_legend": {},
+            "calendar": [],
+        }
+
         tables = soup.find_all("table")
         if not any("Total Classes" in table.get_text(" ", strip=True) for table in tables):
-            return []
+            self._last_attendance_payload = payload
+            return payload
+
+        academic_year = selected_value("select[name='year']")
+        semester = selected_value("select[name='sem']") or selected_value("select[name='semester']")
+        rollno_input = soup.find("input", {"name": "recentitycode"})
+        dept_input = soup.find("input", {"name": "dept"})
+        degree_input = soup.find("input", {"name": "degree"})
+
+        payload["student"] = {
+            "rollno": rollno_input.get("value", "").strip() if rollno_input else "",
+            "department": dept_input.get("value", "").strip() if dept_input else "",
+            "degree": degree_input.get("value", "").strip() if degree_input else "",
+            "semester": semester or "",
+            "academic_year": academic_year or "",
+        }
+
+        header_pattern = re.compile(r"Name:\s*(.*?)(?:\s*\(([^)]+)\))?\s*,\s*Semester\s*:\s*(\d+)", re.I)
+        header_match = header_pattern.search(soup.get_text(" ", strip=True))
+        if header_match:
+            name, roll_from_header, sem_from_header = header_match.groups()
+            payload["student"]["name"] = clean(name)
+            if roll_from_header:
+                payload["student"]["rollno"] = roll_from_header.strip()
+            payload["student"]["semester"] = sem_from_header
 
         subject_codes = []
         for row in soup.find_all("tr"):
@@ -1300,11 +1493,13 @@ class AttendanceScraper:
                     subject_codes = codes
 
         if not subject_codes:
-            return []
+            self._last_attendance_payload = payload
+            return payload
 
         subject_names = {}
         last_subject_code = None
         code_pattern = re.compile(r"^([A-Z]{2,}[A-Z0-9]*\d[A-Z0-9]*)\s*-\s*(.+)$")
+        legend_pattern = re.compile(r"^([A-Z]{2})\s*-\s*(.+)$")
         for line in soup.get_text("\n", strip=True).splitlines():
             normalized_line = clean(line)
             if "-->" in normalized_line or "---" in normalized_line:
@@ -1315,31 +1510,68 @@ class AttendanceScraper:
                 code, name = match.groups()
                 subject_names[code] = name.strip()
                 last_subject_code = code
-            elif last_subject_code and len(subject_names) < len(subject_codes):
+                continue
+            legend_match = legend_pattern.match(normalized_line)
+            if legend_match and legend_match.group(1) not in subject_codes:
+                payload["status_legend"][legend_match.group(1)] = legend_match.group(2).strip()
+                last_subject_code = None
+                continue
+            if last_subject_code and len(subject_names) < len(subject_codes):
                 subject_names[last_subject_code] = clean(
                     f"{subject_names[last_subject_code]} {normalized_line}"
                 )
 
         rows_by_label = {}
-        for row in soup.find_all("tr"):
-            cells = row.find_all(["th", "td"])
-            if len(cells) < 2:
-                continue
-            texts = [clean(cell.get_text(" ", strip=True)) for cell in cells]
-            key = label_key(texts[0])
-            if key:
-                rows_by_label.setdefault(key, []).append(texts[1:])
+        events_by_code = {code: [] for code in subject_codes}
+        for table in tables:
+            header_codes = []
+            for row in table.find_all("tr"):
+                cells = row.find_all(["th", "td"])
+                if len(cells) < 2:
+                    continue
+                texts = [clean(cell.get_text(" ", strip=True)) for cell in cells]
+                key = label_key(texts[0])
+                if key:
+                    rows_by_label.setdefault(key, []).append(texts[1:])
+
+                if key == "days":
+                    header_codes = [text for text in texts[1:] if text]
+                    continue
+
+                if not header_codes or not re.match(r"^[A-Za-z]{3}-\d{1,2}$", texts[0]):
+                    continue
+
+                date_label = texts[0]
+                date_iso = self._normalize_attendance_date(date_label, academic_year)
+                for index, code in enumerate(header_codes):
+                    if index + 1 >= len(texts):
+                        continue
+                    counts = self._attendance_cell_counts(texts[index + 1])
+                    if counts["status"] == "empty":
+                        continue
+                    event = {
+                        "date": date_iso or date_label,
+                        "label": date_label,
+                        **counts,
+                    }
+                    events_by_code.setdefault(code, []).append(event)
+                    payload["calendar"].append({"code": code, **event})
+
+        special_notes = self._parse_special_notes(soup)
 
         total_values = rows_by_label.get("overallclass", [None])[-1]
         present_values = rows_by_label.get("overallpresent", [None])[-1]
+        absent_values = rows_by_label.get("overallabsent", [None])[-1]
         percentage_values = rows_by_label.get("overall%", [None])[-1]
 
         if not total_values or not present_values:
             monthly_totals = rows_by_label.get("totalclasses", [])
             monthly_present = rows_by_label.get("totalpresent", [])
+            monthly_absent = rows_by_label.get("totalabsent", [])
             subject_count = len(subject_codes)
             total_sums = [0] * subject_count
             present_sums = [0] * subject_count
+            absent_sums = [0] * subject_count
 
             for values in monthly_totals:
                 for index, value in enumerate(values[:subject_count]):
@@ -1347,38 +1579,64 @@ class AttendanceScraper:
             for values in monthly_present:
                 for index, value in enumerate(values[:subject_count]):
                     present_sums[index] += to_int(value)
+            for values in monthly_absent:
+                for index, value in enumerate(values[:subject_count]):
+                    absent_sums[index] += to_int(value)
 
             total_values = total_sums
             present_values = present_sums
+            absent_values = absent_sums
             percentage_values = []
 
-        subject_count = min(len(subject_codes), len(total_values), len(present_values))
-        if subject_count == 0:
-            return []
-
-        analysis = []
+        subject_count = min(len(subject_codes), len(total_values or []), len(present_values or []))
         for index in range(subject_count):
             total_classes = to_int(total_values[index])
             total_present = to_int(present_values[index])
             if total_classes <= 0:
                 continue
 
+            total_absent = to_int(absent_values[index]) if absent_values and index < len(absent_values) else max(total_classes - total_present, 0)
             if percentage_values and index < len(percentage_values):
                 percentage = to_float(percentage_values[index])
             else:
                 percentage = round((total_present / total_classes * 100), 2)
 
             code = subject_codes[index]
-            analysis.append({
+            day_wise = events_by_code.get(code, [])
+            absent_dates = [
+                event["date"] for event in day_wise
+                if event.get("absent_count", 0) > 0
+            ]
+            special_events = special_notes.get(code, [])
+            for event in day_wise:
+                for special_code in event.get("special_codes", []):
+                    if any(note["date"] == event["date"] and note["mark"] == special_code for note in special_events):
+                        continue
+                    special_events.append({
+                        "date": event["date"],
+                        "mark": special_code,
+                        "description": payload["status_legend"].get(special_code, special_code),
+                    })
+
+            payload["subjects"].append({
                 "subject": subject_names.get(code, code),
                 "code": code,
                 "attended": total_present,
                 "total": total_classes,
+                "absent": total_absent,
                 "percentage": percentage,
-                "details_link": None
+                "details_link": None,
+                "day_wise": day_wise,
+                "absent_dates": absent_dates,
+                "special_events": sorted(special_events, key=lambda item: item.get("date", "")),
             })
 
-        return analysis
+        self._last_attendance_payload = payload
+        return payload
+
+    def _parse_attendance_html(self, html_content):
+        payload = self._parse_attendance_payload(html_content)
+        return payload.get("subjects", [])
 
     def _parse_day_wise_html(self, html_content):
         """Parse the popup window HTML to extract day-wise attendance."""
@@ -1418,14 +1676,29 @@ class AttendanceScraper:
                         
         return day_wise_data
 
-    def _compute_full_analysis(self, attendance_data):
-        analysis = []
+    def _compute_full_analysis(self, attendance_data, attendance_payload=None, portal_catalog=None):
+        attendance_payload = attendance_payload or {}
+        portal_catalog = portal_catalog or {}
+        subjects = []
         for subject in attendance_data:
             prediction_75 = self.get_leave_prediction(subject, threshold=75.0)
             prediction_65 = self.get_leave_prediction(subject, threshold=65.0)
+            absent_classes = subject.get("absent", max(subject.get("total", 0) - subject.get("attended", 0), 0))
+            day_wise = subject.get("day_wise") or []
+            attended_days = len({event.get("date") for event in day_wise if event.get("present_count", 0) > 0})
+            absent_days = len({event.get("date") for event in day_wise if event.get("absent_count", 0) > 0})
+            recent_activity = sorted(
+                [event for event in day_wise if event.get("date")],
+                key=lambda item: item.get("date", ""),
+                reverse=True,
+            )[:8]
             
             subject_analysis = {
                 **subject,
+                "absent": absent_classes,
+                "attended_days": attended_days,
+                "absent_days": absent_days,
+                "recent_activity": recent_activity,
                 "status_75": prediction_75["status"],
                 "message_75": prediction_75["message"],
                 "skippable_75": prediction_75.get("skippable_classes", 0),
@@ -1437,8 +1710,80 @@ class AttendanceScraper:
                 "status": prediction_75["status"],
                 "message": prediction_75["message"],
             }
-            analysis.append(subject_analysis)
-        return analysis
+            subjects.append(subject_analysis)
+
+        total_classes = sum(subject.get("total", 0) for subject in subjects)
+        total_attended = sum(subject.get("attended", 0) for subject in subjects)
+        total_absent = sum(subject.get("absent", max(subject.get("total", 0) - subject.get("attended", 0), 0)) for subject in subjects)
+        overall_percentage = round((total_attended / total_classes * 100), 2) if total_classes else 0.0
+        risky_subjects = [subject for subject in subjects if subject.get("status_75") != "safe"]
+        lowest_subject = min(subjects, key=lambda item: item.get("percentage", 1000), default=None)
+        strongest_subject = max(subjects, key=lambda item: item.get("percentage", -1), default=None)
+        total_skippable_75 = sum(max(subject.get("skippable_75", 0), 0) for subject in subjects)
+        all_absences = []
+        all_specials = []
+        for subject in subjects:
+            for event in subject.get("day_wise", []):
+                if event.get("absent_count", 0) > 0:
+                    all_absences.append({
+                        "date": event.get("date"),
+                        "subject": subject.get("subject"),
+                        "code": subject.get("code"),
+                        "count": event.get("absent_count", 0),
+                        "raw": event.get("raw", ""),
+                    })
+            for event in subject.get("special_events", []):
+                all_specials.append({
+                    "date": event.get("date"),
+                    "subject": subject.get("subject"),
+                    "code": subject.get("code"),
+                    "mark": event.get("mark"),
+                    "description": event.get("description", ""),
+                })
+
+        return {
+            "schema_version": 2,
+            "synced_at": datetime.utcnow().isoformat() + "Z",
+            "student": attendance_payload.get("student", {}),
+            "attendance": subjects,
+            "insights": {
+                "subject_count": len(subjects),
+                "total_classes": total_classes,
+                "total_attended": total_attended,
+                "total_absent": total_absent,
+                "overall_percentage": overall_percentage,
+                "total_skippable_75": total_skippable_75,
+                "risky_subject_count": len(risky_subjects),
+                "risky_subjects": [
+                    {
+                        "subject": subject.get("subject"),
+                        "code": subject.get("code"),
+                        "percentage": subject.get("percentage"),
+                        "needed_75": subject.get("needed_75", 0),
+                    }
+                    for subject in risky_subjects
+                ],
+                "lowest_subject": {
+                    "subject": lowest_subject.get("subject"),
+                    "code": lowest_subject.get("code"),
+                    "percentage": lowest_subject.get("percentage"),
+                } if lowest_subject else None,
+                "strongest_subject": {
+                    "subject": strongest_subject.get("subject"),
+                    "code": strongest_subject.get("code"),
+                    "percentage": strongest_subject.get("percentage"),
+                } if strongest_subject else None,
+                "recent_absences": sorted(all_absences, key=lambda item: item.get("date") or "", reverse=True)[:12],
+                "special_events": sorted(all_specials, key=lambda item: item.get("date") or "", reverse=True)[:20],
+            },
+            "portal": portal_catalog,
+            "source": {
+                "academic_year": attendance_payload.get("selected_year") or attendance_payload.get("student", {}).get("academic_year", ""),
+                "semester": attendance_payload.get("selected_semester") or attendance_payload.get("student", {}).get("semester", ""),
+                "status_legend": attendance_payload.get("status_legend", {}),
+                "data_surfaces": portal_catalog.get("data_surfaces", []),
+            },
+        }
 
     def get_leave_prediction(self, subject_data, threshold=75.0):
         attended = subject_data["attended"]
@@ -1473,4 +1818,11 @@ class AttendanceScraper:
     def get_full_analysis(self):
         if self.cached_analysis:
             return self.cached_analysis
-        return []
+        return {
+            "schema_version": 2,
+            "student": {},
+            "attendance": [],
+            "insights": {},
+            "portal": {},
+            "source": {},
+        }

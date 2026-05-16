@@ -72,6 +72,21 @@ body {
     gap: 0.5rem;
 }
 
+.check-row {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.check-row input {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    accent-color: var(--accent);
+}
+
 input {
     background: rgba(15, 23, 42, 0.6);
     border: 1px solid var(--glass-border);
@@ -120,6 +135,12 @@ button:hover {
     align-items: center;
 }
 
+.chat-subtitle {
+    margin-top: 0.25rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
 .chat-messages {
     flex: 1;
     overflow-y: auto;
@@ -127,6 +148,29 @@ button:hover {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+.quick-actions {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 1.5rem 1rem;
+    overflow-x: auto;
+}
+
+.quick-chip {
+    flex: 0 0 auto;
+    width: auto;
+    padding: 0.55rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.16);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    font-size: 0.82rem;
+}
+
+.quick-chip:hover {
+    background: rgba(59, 130, 246, 0.25);
+    transform: none;
 }
 
 .message {
