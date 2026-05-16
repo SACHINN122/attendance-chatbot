@@ -27,6 +27,9 @@ class ChatbotEngine:
             "source": {},
         }
 
+    def analysis_payload(self):
+        return self._payload()
+
     def _subjects(self, payload=None):
         payload = payload or self._payload()
         return payload.get("attendance") or []

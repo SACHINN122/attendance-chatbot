@@ -129,10 +129,11 @@ def check_cache():
         # Create a mock scraper just to hold the data
         scraper = AttendanceScraper(use_mock=True)
         scraper.cached_analysis = cached_data
+        chatbot = ChatbotEngine(scraper)
         
         user_sessions[session_id] = {
             "scraper": scraper,
-            "chatbot": ChatbotEngine(scraper),
+            "chatbot": chatbot,
             "rollno": rollno
         }
         return jsonify({
@@ -142,7 +143,7 @@ def check_cache():
             "assistant_version": APP_VERSION,
             "cache_schema_version": cache_schema_version,
             "cache_needs_refresh": cache_schema_version < 2,
-            "analysis": scraper.get_full_analysis()
+            "analysis": chatbot.analysis_payload()
         })
     
     return jsonify({"success": False, "message": "No cache found"})
