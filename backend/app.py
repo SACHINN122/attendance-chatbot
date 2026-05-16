@@ -38,12 +38,19 @@ setup_logging(app)
 
 FRONTEND_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'frontend')
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
+APP_VERSION = "data-analysis-assistant-v2"
 
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
 # Map session_id -> { "scraper": AttendanceScraper(), "chatbot": ChatbotEngine() }
 user_sessions = {}
+
+def _default_rollno():
+    return os.getenv('roll_no') or os.getenv('ROLL_NO') or ""
+
+def _default_password():
+    return os.getenv('password') or os.getenv('PASSWORD') or ""
 
 @app.route('/')
 def serve_index():
@@ -53,13 +60,39 @@ def serve_index():
 def serve_static(filename):
     return send_from_directory(FRONTEND_DIR, filename)
 
+@app.route('/api/config', methods=['GET'])
+def config():
+    rollno = _default_rollno()
+    cache_file = os.path.join(DATA_DIR, f"{rollno}.json") if rollno else ""
+    cache_schema_version = None
+    if cache_file and os.path.exists(cache_file):
+        try:
+            with open(cache_file, "r", encoding="utf-8") as f:
+                cached_data = json.load(f)
+            cache_schema_version = cached_data.get("schema_version", 1) if isinstance(cached_data, dict) else 1
+        except:
+            cache_schema_version = None
+    return jsonify({
+        "assistant_version": APP_VERSION,
+        "default_rollno": rollno,
+        "has_saved_password": bool(_default_password()),
+        "has_cached_data": bool(cache_file and os.path.exists(cache_file)),
+        "cache_schema_version": cache_schema_version,
+        "cache_needs_refresh": bool(cache_schema_version and cache_schema_version < 2),
+    })
+
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.json or {}
-    rollno = data.get('rollno') or os.getenv('roll_no') or os.getenv('ROLL_NO')
-    password = data.get('password') or os.getenv('password') or os.getenv('PASSWORD')
+    rollno = data.get('rollno') or _default_rollno()
+    password = data.get('password') or _default_password()
     if not rollno or not password:
-        return jsonify({"success": False, "message": "rollno and password are required"}), 400
+        missing = "roll number" if not rollno else "password"
+        return jsonify({
+            "success": False,
+            "message": f"{missing} required. Enter it once or set it in .env.",
+            "needs_password": not bool(password),
+        }), 400
     
     scraper = AttendanceScraper(use_mock=False)
     result = scraper.start_login(rollno, password)
@@ -78,16 +111,17 @@ def login():
 
 @app.route('/api/check_cache', methods=['POST'])
 def check_cache():
-    data = request.json
-    rollno = data.get('rollno')
+    data = request.json or {}
+    rollno = data.get('rollno') or _default_rollno()
     
     if not rollno:
         return jsonify({"success": False, "message": "Roll number required"})
 
     cache_file = os.path.join(DATA_DIR, f"{rollno}.json")
     if os.path.exists(cache_file):
-        with open(cache_file, "r") as f:
+        with open(cache_file, "r", encoding="utf-8") as f:
             cached_data = json.load(f)
+        cache_schema_version = cached_data.get("schema_version", 1) if isinstance(cached_data, dict) else 1
             
         import uuid
         session_id = str(uuid.uuid4())
@@ -95,13 +129,22 @@ def check_cache():
         # Create a mock scraper just to hold the data
         scraper = AttendanceScraper(use_mock=True)
         scraper.cached_analysis = cached_data
+        chatbot = ChatbotEngine(scraper)
         
         user_sessions[session_id] = {
             "scraper": scraper,
-            "chatbot": ChatbotEngine(scraper),
+            "chatbot": chatbot,
             "rollno": rollno
         }
-        return jsonify({"success": True, "session_id": session_id, "message": "Loaded from cache"})
+        return jsonify({
+            "success": True,
+            "session_id": session_id,
+            "message": "Loaded from cache",
+            "assistant_version": APP_VERSION,
+            "cache_schema_version": cache_schema_version,
+            "cache_needs_refresh": cache_schema_version < 2,
+            "analysis": chatbot.analysis_payload()
+        })
     
     return jsonify({"success": False, "message": "No cache found"})
 
@@ -214,7 +257,7 @@ def _find_available_port(preferred_port):
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    data = request.json
+    data = request.json or {}
     session_id = data.get('session_id')
     user_message = data.get('message', '')
     
@@ -223,12 +266,12 @@ def chat():
         
     chatbot = user_sessions[session_id]["chatbot"]
     reply = chatbot.process_message(user_message)
-    return jsonify({"reply": reply})
+    return jsonify({"reply": reply, "assistant_version": APP_VERSION})
 
 
 @app.route('/api/analysis', methods=['POST'])
 def analysis():
-    data = request.json
+    data = request.json or {}
     session_id = data.get('session_id')
     if not session_id or session_id not in user_sessions:
         return jsonify({"success": False, "message": "Invalid or missing session_id"}), 401
