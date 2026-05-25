@@ -1,0 +1,4466 @@
+[
+  {
+    "subject": "Manufacturing Processes-I",
+    "code": "MEMEC302",
+    "attended": 48,
+    "total": 62,
+    "absent": 14,
+    "percentage": 77.42,
+    "details_link": null,
+    "day_wise": [
+      {
+        "date": "2025-07-29",
+        "label": "Jul-29",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-07-30",
+        "label": "Jul-30",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-01",
+        "label": "Aug-01",
+        "raw": "0+0+0",
+        "tokens": [
+          "0",
+          "0",
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 3,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 3,
+        "status": "absent"
+      },
+      {
+        "date": "2025-08-05",
+        "label": "Aug-05",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-06",
+        "label": "Aug-06",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-08",
+        "label": "Aug-08",
+        "raw": "1+1+1",
+        "tokens": [
+          "1",
+          "1",
+          "1"
+        ],
+        "present_count": 3,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 3,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-12",
+        "label": "Aug-12",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-13",
+        "label": "Aug-13",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-08-15",
+        "label": "Aug-15",
+        "raw": "GH+GH+GH",
+        "tokens": [
+          "GH",
+          "GH",
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 3,
+        "special_codes": [
+          "GH",
+          "GH",
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-08-19",
+        "label": "Aug-19",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-08-20",
+        "label": "Aug-20",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-22",
+        "label": "Aug-22",
+        "raw": "1+1+1",
+        "tokens": [
+          "1",
+          "1",
+          "1"
+        ],
+        "present_count": 3,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 3,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-26",
+        "label": "Aug-26",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-27",
+        "label": "Aug-27",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-29",
+        "label": "Aug-29",
+        "raw": "1+1+1",
+        "tokens": [
+          "1",
+          "1",
+          "1"
+        ],
+        "present_count": 3,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 3,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-02",
+        "label": "Sep-02",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-03",
+        "label": "Sep-03",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-05",
+        "label": "Sep-05",
+        "raw": "1+GH+GH",
+        "tokens": [
+          "1",
+          "GH",
+          "GH"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 2,
+        "special_codes": [
+          "GH",
+          "GH"
+        ],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-09",
+        "label": "Sep-09",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-10",
+        "label": "Sep-10",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-12",
+        "label": "Sep-12",
+        "raw": "0+0+0",
+        "tokens": [
+          "0",
+          "0",
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 3,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 3,
+        "status": "absent"
+      },
+      {
+        "date": "2025-09-16",
+        "label": "Sep-16",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-17",
+        "label": "Sep-17",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-09-19",
+        "label": "Sep-19",
+        "raw": "1+0+0",
+        "tokens": [
+          "1",
+          "0",
+          "0"
+        ],
+        "present_count": 1,
+        "absent_count": 2,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 3,
+        "status": "mixed"
+      },
+      {
+        "date": "2025-09-23",
+        "label": "Sep-23",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-24",
+        "label": "Sep-24",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-26",
+        "label": "Sep-26",
+        "raw": "MS+MS+MS",
+        "tokens": [
+          "MS",
+          "MS",
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 3,
+        "special_codes": [
+          "MS",
+          "MS",
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-30",
+        "label": "Sep-30",
+        "raw": "TL",
+        "tokens": [
+          "TL"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-01",
+        "label": "Oct-01",
+        "raw": "TL",
+        "tokens": [
+          "TL"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-03",
+        "label": "Oct-03",
+        "raw": "TL+1+1",
+        "tokens": [
+          "TL",
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-07",
+        "label": "Oct-07",
+        "raw": "TL",
+        "tokens": [
+          "TL"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-08",
+        "label": "Oct-08",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-10",
+        "label": "Oct-10",
+        "raw": "0+1+1",
+        "tokens": [
+          "0",
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 3,
+        "status": "mixed"
+      },
+      {
+        "date": "2025-10-14",
+        "label": "Oct-14",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-15",
+        "label": "Oct-15",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-17",
+        "label": "Oct-17",
+        "raw": "1+1+1",
+        "tokens": [
+          "1",
+          "1",
+          "1"
+        ],
+        "present_count": 3,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 3,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-21",
+        "label": "Oct-21",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-22",
+        "label": "Oct-22",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-24",
+        "label": "Oct-24",
+        "raw": "TL+1+1",
+        "tokens": [
+          "TL",
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-28",
+        "label": "Oct-28",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-29",
+        "label": "Oct-29",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-31",
+        "label": "Oct-31",
+        "raw": "1+0+0",
+        "tokens": [
+          "1",
+          "0",
+          "0"
+        ],
+        "present_count": 1,
+        "absent_count": 2,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 3,
+        "status": "mixed"
+      },
+      {
+        "date": "2025-11-04",
+        "label": "Nov-04",
+        "raw": "CS",
+        "tokens": [
+          "CS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "CS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-11-05",
+        "label": "Nov-05",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-11-07",
+        "label": "Nov-07",
+        "raw": "1+1+1",
+        "tokens": [
+          "1",
+          "1",
+          "1"
+        ],
+        "present_count": 3,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 3,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-11",
+        "label": "Nov-11",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-12",
+        "label": "Nov-12",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-14",
+        "label": "Nov-14",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      }
+    ],
+    "absent_dates": [
+      "2025-08-01",
+      "2025-08-13",
+      "2025-08-19",
+      "2025-09-12",
+      "2025-09-17",
+      "2025-09-19",
+      "2025-10-10",
+      "2025-10-31"
+    ],
+    "special_events": [
+      {
+        "date": "2025-08-15",
+        "mark": "GH",
+        "description": "INDEPENDENCE DAY"
+      },
+      {
+        "date": "2025-09-05",
+        "mark": "GH",
+        "description": "Gazetted Holiday"
+      },
+      {
+        "date": "2025-09-23",
+        "mark": "MS",
+        "description": "MID SEM"
+      },
+      {
+        "date": "2025-09-24",
+        "mark": "MS",
+        "description": "MID SEM"
+      },
+      {
+        "date": "2025-09-26",
+        "mark": "MS",
+        "description": "MID SEM EXAM"
+      },
+      {
+        "date": "2025-09-30",
+        "mark": "TL",
+        "description": "ON LEAVE"
+      },
+      {
+        "date": "2025-10-01",
+        "mark": "TL",
+        "description": "OUT OF STATION"
+      },
+      {
+        "date": "2025-10-03",
+        "mark": "TL",
+        "description": "OUT OF STATION"
+      },
+      {
+        "date": "2025-10-07",
+        "mark": "TL",
+        "description": "OUT OF STATION"
+      },
+      {
+        "date": "2025-10-24",
+        "mark": "TL",
+        "description": "CASUAL LEAVE"
+      },
+      {
+        "date": "2025-11-04",
+        "mark": "CS",
+        "description": "INNOVISION"
+      },
+      {
+        "date": "2025-11-05",
+        "mark": "GH",
+        "description": "GURUPARB"
+      }
+    ]
+  },
+  {
+    "subject": "Strength of Materials",
+    "code": "MEMEC303",
+    "attended": 37,
+    "total": 49,
+    "absent": 12,
+    "percentage": 75.51,
+    "details_link": null,
+    "day_wise": [
+      {
+        "date": "2025-07-29",
+        "label": "Jul-29",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-07-30",
+        "label": "Jul-30",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-01",
+        "label": "Aug-01",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-08-04",
+        "label": "Aug-04",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-08-05",
+        "label": "Aug-05",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-06",
+        "label": "Aug-06",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-08",
+        "label": "Aug-08",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-11",
+        "label": "Aug-11",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-12",
+        "label": "Aug-12",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-13",
+        "label": "Aug-13",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-15",
+        "label": "Aug-15",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-08-18",
+        "label": "Aug-18",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-08-19",
+        "label": "Aug-19",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-20",
+        "label": "Aug-20",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-22",
+        "label": "Aug-22",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-25",
+        "label": "Aug-25",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-26",
+        "label": "Aug-26",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-27",
+        "label": "Aug-27",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-29",
+        "label": "Aug-29",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-01",
+        "label": "Sep-01",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-02",
+        "label": "Sep-02",
+        "raw": "TL",
+        "tokens": [
+          "TL"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-03",
+        "label": "Sep-03",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-05",
+        "label": "Sep-05",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-08",
+        "label": "Sep-08",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-09",
+        "label": "Sep-09",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-09-10",
+        "label": "Sep-10",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-12",
+        "label": "Sep-12",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-09-15",
+        "label": "Sep-15",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-16",
+        "label": "Sep-16",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-09-17",
+        "label": "Sep-17",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-09-19",
+        "label": "Sep-19",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-22",
+        "label": "Sep-22",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-23",
+        "label": "Sep-23",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-24",
+        "label": "Sep-24",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-26",
+        "label": "Sep-26",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-29",
+        "label": "Sep-29",
+        "raw": "CS",
+        "tokens": [
+          "CS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "CS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-30",
+        "label": "Sep-30",
+        "raw": "MB",
+        "tokens": [
+          "MB"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MB"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-01",
+        "label": "Oct-01",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-03",
+        "label": "Oct-03",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-06",
+        "label": "Oct-06",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-07",
+        "label": "Oct-07",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-08",
+        "label": "Oct-08",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-10",
+        "label": "Oct-10",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-10-13",
+        "label": "Oct-13",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-14",
+        "label": "Oct-14",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-15",
+        "label": "Oct-15",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-17",
+        "label": "Oct-17",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-20",
+        "label": "Oct-20",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-21",
+        "label": "Oct-21",
+        "raw": "MB",
+        "tokens": [
+          "MB"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MB"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-22",
+        "label": "Oct-22",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-24",
+        "label": "Oct-24",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-27",
+        "label": "Oct-27",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-28",
+        "label": "Oct-28",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-10-29",
+        "label": "Oct-29",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-31",
+        "label": "Oct-31",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-11-03",
+        "label": "Nov-03",
+        "raw": "CS",
+        "tokens": [
+          "CS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "CS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-11-04",
+        "label": "Nov-04",
+        "raw": "CS",
+        "tokens": [
+          "CS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "CS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-11-05",
+        "label": "Nov-05",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-11-07",
+        "label": "Nov-07",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-10",
+        "label": "Nov-10",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-11",
+        "label": "Nov-11",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-12",
+        "label": "Nov-12",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-14",
+        "label": "Nov-14",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      }
+    ],
+    "absent_dates": [
+      "2025-08-01",
+      "2025-08-04",
+      "2025-08-18",
+      "2025-09-09",
+      "2025-09-12",
+      "2025-09-16",
+      "2025-09-17",
+      "2025-10-10",
+      "2025-10-28",
+      "2025-10-31"
+    ],
+    "special_events": [
+      {
+        "date": "2025-08-15",
+        "mark": "GH",
+        "description": "INDEPENDENCE DAY"
+      },
+      {
+        "date": "2025-09-02",
+        "mark": "TL",
+        "description": "TEACHER ON LEAVE"
+      },
+      {
+        "date": "2025-09-05",
+        "mark": "GH",
+        "description": "MILAD UN NABI"
+      },
+      {
+        "date": "2025-09-22",
+        "mark": "MS",
+        "description": "MID SEM EXAM"
+      },
+      {
+        "date": "2025-09-23",
+        "mark": "MS",
+        "description": "MID SEM EXAM"
+      },
+      {
+        "date": "2025-09-24",
+        "mark": "MS",
+        "description": "MID SEM EXAM"
+      },
+      {
+        "date": "2025-09-26",
+        "mark": "MS",
+        "description": "MID SEM EXAM"
+      },
+      {
+        "date": "2025-09-29",
+        "mark": "CS",
+        "description": "BTP"
+      },
+      {
+        "date": "2025-09-30",
+        "mark": "MB",
+        "description": "MASS BUNK"
+      },
+      {
+        "date": "2025-10-07",
+        "mark": "GH",
+        "description": "VALMIKI JAYANTI"
+      },
+      {
+        "date": "2025-10-20",
+        "mark": "GH",
+        "description": "DIWALI"
+      },
+      {
+        "date": "2025-10-21",
+        "mark": "MB",
+        "description": "MASS BUNK"
+      },
+      {
+        "date": "2025-10-27",
+        "mark": "GH",
+        "description": "CHHATH"
+      },
+      {
+        "date": "2025-11-03",
+        "mark": "CS",
+        "description": "INNOVISION"
+      },
+      {
+        "date": "2025-11-04",
+        "mark": "CS",
+        "description": "INNOVISION"
+      },
+      {
+        "date": "2025-11-05",
+        "mark": "GH",
+        "description": "GURU NANAK JAYANTI"
+      }
+    ]
+  },
+  {
+    "subject": "Thermal Engineering-I",
+    "code": "MEMEC304",
+    "attended": 41,
+    "total": 48,
+    "absent": 7,
+    "percentage": 85.42,
+    "details_link": null,
+    "day_wise": [
+      {
+        "date": "2025-08-01",
+        "label": "Aug-01",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-04",
+        "label": "Aug-04",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-06",
+        "label": "Aug-06",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-08",
+        "label": "Aug-08",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-11",
+        "label": "Aug-11",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-13",
+        "label": "Aug-13",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-15",
+        "label": "Aug-15",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-08-18",
+        "label": "Aug-18",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-08-20",
+        "label": "Aug-20",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-22",
+        "label": "Aug-22",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-25",
+        "label": "Aug-25",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-27",
+        "label": "Aug-27",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-29",
+        "label": "Aug-29",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-01",
+        "label": "Sep-01",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-03",
+        "label": "Sep-03",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-05",
+        "label": "Sep-05",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-08",
+        "label": "Sep-08",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-09-10",
+        "label": "Sep-10",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-12",
+        "label": "Sep-12",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-09-15",
+        "label": "Sep-15",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-09-17",
+        "label": "Sep-17",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-19",
+        "label": "Sep-19",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-22",
+        "label": "Sep-22",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-24",
+        "label": "Sep-24",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-26",
+        "label": "Sep-26",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-29",
+        "label": "Sep-29",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-01",
+        "label": "Oct-01",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-03",
+        "label": "Oct-03",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-10-06",
+        "label": "Oct-06",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-08",
+        "label": "Oct-08",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-10",
+        "label": "Oct-10",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-10-13",
+        "label": "Oct-13",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-15",
+        "label": "Oct-15",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-17",
+        "label": "Oct-17",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-20",
+        "label": "Oct-20",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-22",
+        "label": "Oct-22",
+        "raw": "MS+TL",
+        "tokens": [
+          "MS",
+          "TL"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 2,
+        "special_codes": [
+          "MS",
+          "TL"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-24",
+        "label": "Oct-24",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-27",
+        "label": "Oct-27",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-29",
+        "label": "Oct-29",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-31",
+        "label": "Oct-31",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-03",
+        "label": "Nov-03",
+        "raw": "CS",
+        "tokens": [
+          "CS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "CS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-11-05",
+        "label": "Nov-05",
+        "raw": "GH+GH",
+        "tokens": [
+          "GH",
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 2,
+        "special_codes": [
+          "GH",
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-11-07",
+        "label": "Nov-07",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-10",
+        "label": "Nov-10",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-11-12",
+        "label": "Nov-12",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-14",
+        "label": "Nov-14",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      }
+    ],
+    "absent_dates": [
+      "2025-08-18",
+      "2025-09-08",
+      "2025-09-12",
+      "2025-09-15",
+      "2025-10-03",
+      "2025-10-10",
+      "2025-11-10"
+    ],
+    "special_events": [
+      {
+        "date": "2025-08-15",
+        "mark": "GH",
+        "description": "INDEPENDANCE DAY"
+      },
+      {
+        "date": "2025-09-05",
+        "mark": "GH",
+        "description": "MILAD UL NABI"
+      },
+      {
+        "date": "2025-09-22",
+        "mark": "MS",
+        "description": "MID SEM EXAM"
+      },
+      {
+        "date": "2025-09-24",
+        "mark": "MS",
+        "description": "MID SEM EXAM"
+      },
+      {
+        "date": "2025-09-26",
+        "mark": "MS",
+        "description": "MID SEM EXAM"
+      },
+      {
+        "date": "2025-10-20",
+        "mark": "GH",
+        "description": "DEEPAWALI"
+      },
+      {
+        "date": "2025-10-22",
+        "mark": "TL",
+        "description": "RH"
+      },
+      {
+        "date": "2025-10-22",
+        "mark": "MS",
+        "description": "Mid Sem Exam"
+      },
+      {
+        "date": "2025-11-03",
+        "mark": "CS",
+        "description": "INNOVISION 2025"
+      },
+      {
+        "date": "2025-11-05",
+        "mark": "GH",
+        "description": "GURU NANAK BIRTHDAY"
+      }
+    ]
+  },
+  {
+    "subject": "Fluid Mechanics & Machines",
+    "code": "MEMEC305",
+    "attended": 48,
+    "total": 56,
+    "absent": 8,
+    "percentage": 85.71,
+    "details_link": null,
+    "day_wise": [
+      {
+        "date": "2025-07-30",
+        "label": "Jul-30",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-07-31",
+        "label": "Jul-31",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-04",
+        "label": "Aug-04",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-06",
+        "label": "Aug-06",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-07",
+        "label": "Aug-07",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-11",
+        "label": "Aug-11",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-13",
+        "label": "Aug-13",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-14",
+        "label": "Aug-14",
+        "raw": "0+0",
+        "tokens": [
+          "0",
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 2,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "absent"
+      },
+      {
+        "date": "2025-08-18",
+        "label": "Aug-18",
+        "raw": "TL",
+        "tokens": [
+          "TL"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-08-20",
+        "label": "Aug-20",
+        "raw": "TL",
+        "tokens": [
+          "TL"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-08-21",
+        "label": "Aug-21",
+        "raw": "TL+0",
+        "tokens": [
+          "TL",
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-08-25",
+        "label": "Aug-25",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-27",
+        "label": "Aug-27",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-28",
+        "label": "Aug-28",
+        "raw": "0+1",
+        "tokens": [
+          "0",
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "mixed"
+      },
+      {
+        "date": "2025-09-01",
+        "label": "Sep-01",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-03",
+        "label": "Sep-03",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-04",
+        "label": "Sep-04",
+        "raw": "1+0",
+        "tokens": [
+          "1",
+          "0"
+        ],
+        "present_count": 1,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "mixed"
+      },
+      {
+        "date": "2025-09-07",
+        "label": "Sep-07",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-08",
+        "label": "Sep-08",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-10",
+        "label": "Sep-10",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-11",
+        "label": "Sep-11",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-15",
+        "label": "Sep-15",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-09-17",
+        "label": "Sep-17",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-18",
+        "label": "Sep-18",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-20",
+        "label": "Sep-20",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-22",
+        "label": "Sep-22",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-24",
+        "label": "Sep-24",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-25",
+        "label": "Sep-25",
+        "raw": "MS+MS",
+        "tokens": [
+          "MS",
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 2,
+        "special_codes": [
+          "MS",
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-29",
+        "label": "Sep-29",
+        "raw": "CS",
+        "tokens": [
+          "CS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "CS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-01",
+        "label": "Oct-01",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-02",
+        "label": "Oct-02",
+        "raw": "GH+1",
+        "tokens": [
+          "GH",
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-06",
+        "label": "Oct-06",
+        "raw": "TL",
+        "tokens": [
+          "TL"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-08",
+        "label": "Oct-08",
+        "raw": "TL",
+        "tokens": [
+          "TL"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-09",
+        "label": "Oct-09",
+        "raw": "TL+1",
+        "tokens": [
+          "TL",
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-13",
+        "label": "Oct-13",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-15",
+        "label": "Oct-15",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-16",
+        "label": "Oct-16",
+        "raw": "1+0",
+        "tokens": [
+          "1",
+          "0"
+        ],
+        "present_count": 1,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "mixed"
+      },
+      {
+        "date": "2025-10-20",
+        "label": "Oct-20",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-22",
+        "label": "Oct-22",
+        "raw": "TL",
+        "tokens": [
+          "TL"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-23",
+        "label": "Oct-23",
+        "raw": "TL+1",
+        "tokens": [
+          "TL",
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-27",
+        "label": "Oct-27",
+        "raw": "1+1+GH",
+        "tokens": [
+          "1",
+          "1",
+          "GH"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-29",
+        "label": "Oct-29",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-30",
+        "label": "Oct-30",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-03",
+        "label": "Nov-03",
+        "raw": "CS",
+        "tokens": [
+          "CS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "CS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-11-05",
+        "label": "Nov-05",
+        "raw": "1+1+CS",
+        "tokens": [
+          "1",
+          "1",
+          "CS"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "CS"
+        ],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-06",
+        "label": "Nov-06",
+        "raw": "1+1+1+1",
+        "tokens": [
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "present_count": 4,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 4,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-10",
+        "label": "Nov-10",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-11-12",
+        "label": "Nov-12",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-13",
+        "label": "Nov-13",
+        "raw": "1+1",
+        "tokens": [
+          "1",
+          "1"
+        ],
+        "present_count": 2,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 2,
+        "status": "present"
+      }
+    ],
+    "absent_dates": [
+      "2025-08-14",
+      "2025-08-21",
+      "2025-08-28",
+      "2025-09-04",
+      "2025-09-15",
+      "2025-10-16",
+      "2025-11-10"
+    ],
+    "special_events": [
+      {
+        "date": "2025-08-18",
+        "mark": "TL",
+        "description": "TL"
+      },
+      {
+        "date": "2025-08-20",
+        "mark": "TL",
+        "description": "TL"
+      },
+      {
+        "date": "2025-08-21",
+        "mark": "TL",
+        "description": "TL"
+      },
+      {
+        "date": "2025-09-22",
+        "mark": "MS",
+        "description": "MSE"
+      },
+      {
+        "date": "2025-09-24",
+        "mark": "MS",
+        "description": "MSE"
+      },
+      {
+        "date": "2025-09-25",
+        "mark": "MS",
+        "description": "MSE"
+      },
+      {
+        "date": "2025-09-29",
+        "mark": "CS",
+        "description": "BTP I MSE"
+      },
+      {
+        "date": "2025-10-02",
+        "mark": "GH",
+        "description": "GH"
+      },
+      {
+        "date": "2025-10-06",
+        "mark": "TL",
+        "description": "TL"
+      },
+      {
+        "date": "2025-10-08",
+        "mark": "TL",
+        "description": "TL"
+      },
+      {
+        "date": "2025-10-09",
+        "mark": "TL",
+        "description": "TL"
+      },
+      {
+        "date": "2025-10-20",
+        "mark": "GH",
+        "description": "DIWALI"
+      },
+      {
+        "date": "2025-10-22",
+        "mark": "TL",
+        "description": "TL"
+      },
+      {
+        "date": "2025-10-23",
+        "mark": "TL",
+        "description": "TL"
+      },
+      {
+        "date": "2025-10-27",
+        "mark": "GH",
+        "description": "CHHATH PUJA"
+      },
+      {
+        "date": "2025-11-03",
+        "mark": "CS",
+        "description": "INNOVISION"
+      },
+      {
+        "date": "2025-11-05",
+        "mark": "CS",
+        "description": "CS"
+      }
+    ]
+  },
+  {
+    "subject": "Numerical Methods & Computation",
+    "code": "MEMTC301",
+    "attended": 43,
+    "total": 48,
+    "absent": 5,
+    "percentage": 89.58,
+    "details_link": null,
+    "day_wise": [
+      {
+        "date": "2025-07-30",
+        "label": "Jul-30",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-07-31",
+        "label": "Jul-31",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-08-04",
+        "label": "Aug-04",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-05",
+        "label": "Aug-05",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-06",
+        "label": "Aug-06",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-07",
+        "label": "Aug-07",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-11",
+        "label": "Aug-11",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-12",
+        "label": "Aug-12",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-13",
+        "label": "Aug-13",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-14",
+        "label": "Aug-14",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-18",
+        "label": "Aug-18",
+        "raw": "TL",
+        "tokens": [
+          "TL"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-08-19",
+        "label": "Aug-19",
+        "raw": "TL",
+        "tokens": [
+          "TL"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "TL"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-08-20",
+        "label": "Aug-20",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-08-21",
+        "label": "Aug-21",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-25",
+        "label": "Aug-25",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-26",
+        "label": "Aug-26",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-27",
+        "label": "Aug-27",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-08-28",
+        "label": "Aug-28",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-01",
+        "label": "Sep-01",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-02",
+        "label": "Sep-02",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-03",
+        "label": "Sep-03",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-04",
+        "label": "Sep-04",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-08",
+        "label": "Sep-08",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-09",
+        "label": "Sep-09",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-10",
+        "label": "Sep-10",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-11",
+        "label": "Sep-11",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-15",
+        "label": "Sep-15",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-09-16",
+        "label": "Sep-16",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-17",
+        "label": "Sep-17",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-18",
+        "label": "Sep-18",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-09-22",
+        "label": "Sep-22",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-23",
+        "label": "Sep-23",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-24",
+        "label": "Sep-24",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-25",
+        "label": "Sep-25",
+        "raw": "MS",
+        "tokens": [
+          "MS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "MS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-29",
+        "label": "Sep-29",
+        "raw": "CS",
+        "tokens": [
+          "CS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "CS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-09-30",
+        "label": "Sep-30",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-01",
+        "label": "Oct-01",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-02",
+        "label": "Oct-02",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-04",
+        "label": "Oct-04",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-06",
+        "label": "Oct-06",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-07",
+        "label": "Oct-07",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-08",
+        "label": "Oct-08",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-09",
+        "label": "Oct-09",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-13",
+        "label": "Oct-13",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-14",
+        "label": "Oct-14",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-15",
+        "label": "Oct-15",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-16",
+        "label": "Oct-16",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-20",
+        "label": "Oct-20",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-21",
+        "label": "Oct-21",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-22",
+        "label": "Oct-22",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-23",
+        "label": "Oct-23",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-27",
+        "label": "Oct-27",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-28",
+        "label": "Oct-28",
+        "raw": "CS",
+        "tokens": [
+          "CS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "CS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-10-29",
+        "label": "Oct-29",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-10-30",
+        "label": "Oct-30",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-03",
+        "label": "Nov-03",
+        "raw": "CS",
+        "tokens": [
+          "CS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "CS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-11-04",
+        "label": "Nov-04",
+        "raw": "CS",
+        "tokens": [
+          "CS"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "CS"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-11-05",
+        "label": "Nov-05",
+        "raw": "GH",
+        "tokens": [
+          "GH"
+        ],
+        "present_count": 0,
+        "absent_count": 0,
+        "special_count": 1,
+        "special_codes": [
+          "GH"
+        ],
+        "class_count": 0,
+        "status": "special"
+      },
+      {
+        "date": "2025-11-06",
+        "label": "Nov-06",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-08",
+        "label": "Nov-08",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-10",
+        "label": "Nov-10",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-11-11",
+        "label": "Nov-11",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      },
+      {
+        "date": "2025-11-12",
+        "label": "Nov-12",
+        "raw": "0",
+        "tokens": [
+          "0"
+        ],
+        "present_count": 0,
+        "absent_count": 1,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "absent"
+      },
+      {
+        "date": "2025-11-13",
+        "label": "Nov-13",
+        "raw": "1",
+        "tokens": [
+          "1"
+        ],
+        "present_count": 1,
+        "absent_count": 0,
+        "special_count": 0,
+        "special_codes": [],
+        "class_count": 1,
+        "status": "present"
+      }
+    ],
+    "absent_dates": [
+      "2025-07-31",
+      "2025-08-20",
+      "2025-09-15",
+      "2025-11-10",
+      "2025-11-12"
+    ],
+    "special_events": [
+      {
+        "date": "2025-08-18",
+        "mark": "TL",
+        "description": "TL"
+      },
+      {
+        "date": "2025-08-19",
+        "mark": "TL",
+        "description": "TL"
+      },
+      {
+        "date": "2025-09-22",
+        "mark": "MS",
+        "description": "MS"
+      },
+      {
+        "date": "2025-09-23",
+        "mark": "MS",
+        "description": "MS"
+      },
+      {
+        "date": "2025-09-24",
+        "mark": "MS",
+        "description": "MS"
+      },
+      {
+        "date": "2025-09-25",
+        "mark": "MS",
+        "description": "MS"
+      },
+      {
+        "date": "2025-09-29",
+        "mark": "CS",
+        "description": "CS"
+      },
+      {
+        "date": "2025-10-02",
+        "mark": "GH",
+        "description": "GH"
+      },
+      {
+        "date": "2025-10-07",
+        "mark": "GH",
+        "description": "GH"
+      },
+      {
+        "date": "2025-10-20",
+        "mark": "GH",
+        "description": "GH"
+      },
+      {
+        "date": "2025-10-21",
+        "mark": "GH",
+        "description": "GH"
+      },
+      {
+        "date": "2025-10-27",
+        "mark": "GH",
+        "description": "GH"
+      },
+      {
+        "date": "2025-10-28",
+        "mark": "CS",
+        "description": "CS"
+      },
+      {
+        "date": "2025-11-03",
+        "mark": "CS",
+        "description": "CS"
+      },
+      {
+        "date": "2025-11-04",
+        "mark": "CS",
+        "description": "CS"
+      },
+      {
+        "date": "2025-11-05",
+        "mark": "GH",
+        "description": "GH"
+      }
+    ]
+  }
+]

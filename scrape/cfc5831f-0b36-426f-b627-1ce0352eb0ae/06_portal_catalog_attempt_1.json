@@ -1,0 +1,331 @@
+{
+  "sections": [
+    "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+    "PERSONAL INFO",
+    "TIME TABLE",
+    "ATTENDANCE",
+    "MY SCHOLARSHIP",
+    "HOSTEL",
+    "FEE PAYMENTS",
+    "EXAMINATIONS",
+    "LIBRARY MANAGEMENT",
+    "FEEDBACK, GRIEVANCES",
+    "REQUESTS",
+    "REPORTS"
+  ],
+  "links": [
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "My Profile",
+      "target": "top"
+    },
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "My Activities",
+      "target": "top"
+    },
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "Registrations",
+      "target": "top"
+    },
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "Change Password",
+      "target": "data"
+    },
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "ERP Help",
+      "target": "top"
+    },
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "Logout",
+      "target": ""
+    },
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "Home",
+      "target": ""
+    },
+    {
+      "section": "Portal",
+      "text": "Collapse All",
+      "target": ""
+    },
+    {
+      "section": "Portal",
+      "text": "Expand All",
+      "target": ""
+    },
+    {
+      "section": "PERSONAL INFO",
+      "text": "ID Card Details",
+      "target": "data"
+    },
+    {
+      "section": "PERSONAL INFO",
+      "text": "Email/Mobile Update",
+      "target": "top"
+    },
+    {
+      "section": "PERSONAL INFO",
+      "text": "Lost & Found",
+      "target": "top"
+    },
+    {
+      "section": "PERSONAL INFO",
+      "text": "Medical Certificate Request",
+      "target": "top"
+    },
+    {
+      "section": "PERSONAL INFO",
+      "text": "Ambulance Request",
+      "target": "top"
+    },
+    {
+      "section": "PERSONAL INFO",
+      "text": "Class Represent",
+      "target": "top"
+    },
+    {
+      "section": "TIME TABLE",
+      "text": "My Timetable",
+      "target": "data"
+    },
+    {
+      "section": "TIME TABLE",
+      "text": "Faculty Timetable",
+      "target": "data"
+    },
+    {
+      "section": "TIME TABLE",
+      "text": "ClassTimetable",
+      "target": "data"
+    },
+    {
+      "section": "TIME TABLE",
+      "text": "RoomTimetable",
+      "target": "data"
+    },
+    {
+      "section": "TIME TABLE",
+      "text": "LabTimetable",
+      "target": "data"
+    },
+    {
+      "section": "ATTENDANCE",
+      "text": "My Attendance",
+      "target": "data"
+    },
+    {
+      "section": "ATTENDANCE",
+      "text": "Current Sem Courses Registered.",
+      "target": "data"
+    },
+    {
+      "section": "MY SCHOLARSHIP",
+      "text": "Scholarship",
+      "target": "top"
+    },
+    {
+      "section": "HOSTEL",
+      "text": "Request Hostel Facility",
+      "target": "data"
+    },
+    {
+      "section": "HOSTEL",
+      "text": "Hostel Guest (Before applying, Please take permission from warden.)",
+      "target": ""
+    },
+    {
+      "section": "FEE PAYMENTS",
+      "text": "Fee Payments",
+      "target": "top"
+    },
+    {
+      "section": "FEE PAYMENTS",
+      "text": "Fee Paid Through Loan",
+      "target": ""
+    },
+    {
+      "section": "EXAMINATIONS",
+      "text": "NSUT TRANSCRIPT",
+      "target": "data"
+    },
+    {
+      "section": "EXAMINATIONS",
+      "text": "Student Elective Preference",
+      "target": "data"
+    },
+    {
+      "section": "EXAMINATIONS",
+      "text": "III sem Fondation Elective Preference",
+      "target": "data"
+    },
+    {
+      "section": "EXAMINATIONS",
+      "text": "Current Semester Registered Courses",
+      "target": "data"
+    },
+    {
+      "section": "EXAMINATIONS",
+      "text": "Examination Admit Card",
+      "target": "data"
+    },
+    {
+      "section": "EXAMINATIONS",
+      "text": "Theory Marks",
+      "target": "data"
+    },
+    {
+      "section": "EXAMINATIONS",
+      "text": "Exam Results",
+      "target": "data"
+    },
+    {
+      "section": "EXAMINATIONS",
+      "text": "Drop Courses for T&P Percentage",
+      "target": "data"
+    },
+    {
+      "section": "EXAMINATIONS",
+      "text": "Student Transcript (CBCS)(NSIT)",
+      "target": "new"
+    },
+    {
+      "section": "EXAMINATIONS",
+      "text": "Semester wise Grade Card",
+      "target": "new"
+    },
+    {
+      "section": "EXAMINATIONS",
+      "text": "Summer Semester wise Grade Card",
+      "target": "new"
+    },
+    {
+      "section": "LIBRARY MANAGEMENT",
+      "text": "Received Books",
+      "target": "top"
+    },
+    {
+      "section": "FEEDBACK, GRIEVANCES",
+      "text": "Course Feedback Form",
+      "target": "top"
+    },
+    {
+      "section": "FEEDBACK, GRIEVANCES",
+      "text": "NAAC Feedback Form",
+      "target": "top"
+    },
+    {
+      "section": "FEEDBACK, GRIEVANCES",
+      "text": "Student Grievances",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "IMS Request Note",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "IMS Request Note Received",
+      "target": "top"
+    },
+    {
+      "section": "REQUESTS",
+      "text": "EWS Request",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "ID Card Request",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "Bonafide Certificate Requests",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "Transcripts Requests",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "Merit Certificate Requests",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "Course Completion Certificate Requests",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "Provisional Certificate Requests",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "Fee Structure Certificate Requests",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "Provisional Mark sheet Requests",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "Rank Certificate Requests",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "Original Degree Certificate Requests",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "Deen Requests",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "Out going Mobility Request",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "Student Leave Request",
+      "target": ""
+    },
+    {
+      "section": "REQUESTS",
+      "text": "Councillor Request",
+      "target": ""
+    },
+    {
+      "section": "REPORTS",
+      "text": "Clubs-Associations-Societies Report",
+      "target": "data"
+    }
+  ],
+  "data_surfaces": [
+    "profile",
+    "attendance",
+    "timetable",
+    "exams",
+    "fees",
+    "library",
+    "requests"
+  ],
+  "student_profile": {
+    "name": "SACHIN PRAJAPATI",
+    "photo_available": true
+  }
+}

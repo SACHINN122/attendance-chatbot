@@ -1,0 +1,42 @@
+[
+  {
+    "subject": "Manufacturing Processes-I",
+    "code": "MEMEC302",
+    "attended": 48,
+    "total": 62,
+    "percentage": 77.42,
+    "details_link": null
+  },
+  {
+    "subject": "Strength of Materials",
+    "code": "MEMEC303",
+    "attended": 37,
+    "total": 49,
+    "percentage": 75.51,
+    "details_link": null
+  },
+  {
+    "subject": "Thermal Engineering-I",
+    "code": "MEMEC304",
+    "attended": 41,
+    "total": 48,
+    "percentage": 85.42,
+    "details_link": null
+  },
+  {
+    "subject": "Fluid Mechanics & Machines",
+    "code": "MEMEC305",
+    "attended": 48,
+    "total": 56,
+    "percentage": 85.71,
+    "details_link": null
+  },
+  {
+    "subject": "Numerical Methods & Computation",
+    "code": "MEMTC301",
+    "attended": 43,
+    "total": 48,
+    "percentage": 89.58,
+    "details_link": null
+  }
+]

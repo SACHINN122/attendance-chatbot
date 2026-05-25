@@ -1,0 +1,49 @@
+{
+  "sections": [
+    "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY"
+  ],
+  "links": [
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "My Profile",
+      "target": "top"
+    },
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "My Activities",
+      "target": "top"
+    },
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "Registrations",
+      "target": "top"
+    },
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "Change Password",
+      "target": "data"
+    },
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "ERP Help",
+      "target": "top"
+    },
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "Logout",
+      "target": ""
+    },
+    {
+      "section": "NETAJI SUBHAS UNIVERSITY OF TECHNOLOGY",
+      "text": "Home",
+      "target": ""
+    }
+  ],
+  "data_surfaces": [
+    "profile"
+  ],
+  "student_profile": {
+    "name": "AADITYA KUMAR",
+    "photo_available": true
+  }
+}

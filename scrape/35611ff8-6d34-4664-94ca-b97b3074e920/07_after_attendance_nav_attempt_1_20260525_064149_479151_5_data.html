@@ -1,0 +1,80 @@
+<html><head><link href="css/METAL/app.css" type="text/css" rel="stylesheet">
+        <script language="javascript" src="js/plumjs.js" type="text/javascript"> </script><link href="css/METAL/app.css" type="text/css" rel="stylesheet">
+		<script language="javascript" src="js/plumjs.js" type="text/javascript"> 
+		</script>
+	<!-- saved from url=(0063)file:///C:/Users/adm/Desktop/Toogle%20search/togglesearch.html? -->
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <link href="item-block.css" rel="stylesheet"> 
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+     
+    <script>
+        $(document).ready(function(){
+			$('.ttable_block').hide();
+            var is_btn = false;
+            $('.ttable_btn').hover(function(){
+                is_btn = true;
+                $('.ttable_block').hide();
+                $(this).parent().find('.ttable_block').toggle();
+            });
+            
+            $(body).hover(function(){ 
+                if ( ! is_btn)  
+                    $('.ttable_block').hide();
+                is_btn = false;
+            });
+            
+        });
+		function CheckFaculty(){
+			faculty = document.getElementById('txttutorcode').value;
+			if(faculty==''){
+				alert('Please Pick Faculty and Proceed.');
+				return false;
+			}
+			return true;
+		}
+		function CheckRoom(){
+			room = document.getElementById('txtroomcode').value;
+			if(room==''){
+				alert('Please Pick Room and Proceed.');
+				return false;
+			}
+			return true;
+		}
+		function PushNA(typ){
+			if(typ=='Dept.All'){
+				document.getElementById('txttutor').value='Dept.All';
+				document.getElementById('txttutorcode').value='Dept.All';
+			}
+			if(typ=='All'){
+				document.getElementById('txttutor').value='All';
+				document.getElementById('txttutorcode').value='All';
+			}
+		}
+	</script>
+	<style>
+		 body{font-family:Arial;}
+		 </style>
+	</head>
+
+	<body><center><form name="pdff1" id="pdff1" method="post" action="plum_createpdf.php"><textarea name="pdfcontent" id="pdfcontent" style="display: none;" cols="15" rows="10"></textarea>
+		<input type="hidden" name="fullpath" value="https://www.imsnsit.org/imsnsit/" style="">
+		<input type="hidden" name="title" value="Download25_05_2026 12_11" style="">
+		<input type="hidden" name="footer" value="" style="">
+		<input type="hidden" name="header" value="" style="">
+		<input type="submit" name="mpdfx" id="mpdfx" value="Download PDF" class="but" onclick="if (document.getElementById(&quot;print1&quot;))document.getElementById(&quot;print1&quot;).style.display=&quot;none&quot;;if (document.getElementById(&quot;print2&quot;))document.getElementById(&quot;print2&quot;).style.display=&quot;none&quot;;
+		document.getElementById(&quot;pdfcontent&quot;).value=document.getElementById(&quot;myreport&quot;).innerHTML;" style="">&nbsp;</form></center><div id="myreport"><style>
+			@media print {
+				p {page-break-before: always;}
+			}
+			</style><form name="frm" id="frm" method="post">
+			<div id="rep"><table width="100%" align="center" border="0" style="border-collapse:collapse;" cellspacing="0" cellpadding="3" class="plum_fieldbig">
+			<tbody><tr class="plum_head"><td align="center">Year : <select name="year" id="year" caption="" class="plum_combo" style="width:70px;" required="" mandatory="0"><option value=""> Select ...</option><option value="2026-27">2026-27</option><option value="2025-26">2025-26</option><option value="2024-25">2024-25</option><option value="2023-24">2023-24</option><option value="2022-23">2022-23</option></select>
+<input type="hidden" name="enc_year" id="enc_year" value="MFBJY25Xf5NoCl9fq4OFoefiCxqKB1Kyqok7FwvD6X0kNYAOxE/rsTNHlYLYSns2AINhUCDcFptttKZ3gcd4fw==" style="">   Semester : <select name="sem" id="sem" style="width:60px;" class="plum_combo" required=""><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
+<input type="hidden" name="enc_sem" id="enc_sem" value="bzngIXTD9NKptsurOuT2ubu13aDBAJWfLewXfAXIzgpvJy+rhKbMUxDzqLY3Rzvh" style=""> &nbsp;
+			<input type="submit" name="submit" value="Submit" style="">
+			<input type="hidden" name="recentitycode" value="2024UME7211" style="">
+			<input type="hidden" name="dept" value="MECHANICAL ENGINEERING" style="">
+			<input type="hidden" name="degree" value="B.Tech." style="">
+			<input type="hidden" name="ename" value="" style="">
+			<input type="hidden" name="ecode" value="" style="">
+			</td></tr></tbody></table></div></form></div></body></html>
