@@ -2,6 +2,12 @@
 
 An intelligent attendance analytics chatbot for NSUT that predicts leave eligibility and provides insights into your attendance patterns using web scraping and conversational AI.
 
+The logged-in workspace now combines chat with an interactive dashboard:
+- subject, semester, date-range, status, and search filters
+- overall metrics, subject comparison bars, cumulative attendance trend, subject table, and date-wise records
+- authenticated profile header with portal name, roll number, and captured student photo when the portal exposes it
+- chat commands for summary, subject-wise details, absences, risk/safe subjects, profile, website surfaces, and shortcut help
+
 ---
 
 ## 🎯 Why This Architecture?
@@ -211,7 +217,7 @@ All endpoints return JSON. Requires `session_id` (except login/cache check).
 - `"ABSENT"` → Subject-wise absences, plus exact dates when v2 day-wise data exists
 - `"SAFE"` → Subjects where the student can skip classes while staying above 75%
 - `"RISK"` → Borderline or below-threshold subjects
-- `"PROFILE"` → Safe profile summary with masked roll number
+- `"PROFILE"` → Authenticated student profile summary in the local app
 - `"CALENDAR"` → Portal marks such as GH/TL/CS/MB
 - `"WEBSITE"` → Authenticated website sections discovered after login
 - `"MEMEC303"` → Details for one subject by code/name
@@ -445,7 +451,7 @@ If you do not use Blueprint, create **New** -> **Web Service** and use these val
 | --- | --- |
 | Runtime | `Python 3` |
 | Root Directory | Leave empty, or set to repository root |
-| Build Command | `cd backend && pip install --upgrade pip && pip install -r requirements.txt && python -m playwright install chromium` |
+| Build Command | `pip install --upgrade pip && pip install -r backend/requirements.txt && PLAYWRIGHT_BROWSERS_PATH=/opt/render/project/playwright python -m playwright install --with-deps chromium` |
 | Start Command | `cd backend && gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 1 --timeout 180` |
 | Health Check Path | `/api/config` |
 
@@ -453,8 +459,8 @@ Add these environment variables in **Environment**:
 
 | Key | Value |
 | --- | --- |
-| `PLAYWRIGHT_BROWSERS_PATH` | `0` |
-| `PYTHON_VERSION` | `3.10.0` |
+| `PLAYWRIGHT_BROWSERS_PATH` | `/opt/render/project/playwright` |
+| `PYTHON_VERSION` | `3.12.4` |
 | `HOST` | `0.0.0.0` |
 | `roll_no` | Your test roll number, only if you want the login form prefilled |
 | `password` | Your portal password, only as a Render secret |
@@ -465,6 +471,8 @@ Add these environment variables in **Environment**:
 | `RUNANYWHERE_API_KEY` | Required only when your Runanywhere endpoint needs an API key |
 
 Render supplies `PORT` automatically; do not hard-code it. Keep `backend/data/`, `backend/scrape/`, `.env`, screenshots, and debug HTML out of git because they are local runtime artifacts and may contain portal data.
+
+If the live app says `Playwright browser failed to start`, the deployed service was built without Chromium or with a different `PLAYWRIGHT_BROWSERS_PATH` than runtime. Update the Build Command and environment variable above, then trigger **Manual Deploy -> Clear build cache & deploy** on Render.
 
 *Note: The first deployment can take 2-4 minutes because Chromium is downloaded during the build.*
 
