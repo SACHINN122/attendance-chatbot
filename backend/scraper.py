@@ -837,8 +837,8 @@ class AttendanceScraper:
         semesters = self._ordered_unique([
             os.getenv("ATTENDANCE_SEMESTER", "").strip(),
             os.getenv("SEMESTER", "").strip(),
-            previous_semester,
             guessed_semester,
+            previous_semester,
             *descending_semesters,
             semester_state.get("value"),
             *semester_options,
@@ -1280,9 +1280,24 @@ class AttendanceScraper:
     def _ocr_captcha_from_page(self, page, frame):
         """Attempt to read CAPTCHA via OCR (Tesseract)"""
         try:
+            # pyrefly: ignore [missing-import]
             import pytesseract
+            # pyrefly: ignore [missing-import]
             from PIL import Image
             import io
+            
+            # Configure tesseract executable path on Windows if not already on PATH
+            if os.name == 'nt':
+                import shutil
+                if not shutil.which("tesseract"):
+                    for path in [
+                        r"C:\Program Files\Tesseract-OCR\tesseract.exe",
+                        r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
+                        os.path.expanduser(r"~\AppData\Local\Programs\Tesseract-OCR\tesseract.exe")
+                    ]:
+                        if os.path.exists(path):
+                            pytesseract.pytesseract.tesseract_cmd = path
+                            break
             
             # Find and screenshot the CAPTCHA image
             try:
@@ -1831,19 +1846,19 @@ class AttendanceScraper:
                 return {
                     "status": "borderline", 
                     "skippable_classes": 0,
-                    "message": f"Exactly at {threshold}%! You cannot skip any class without dropping below {threshold}%."
+                    "message": f"Exactly at {threshold}%! You can skip 0 classes."
                 }
             return {
                 "status": "safe", 
                 "skippable_classes": skippable,
-                "message": f"You can skip {skippable} more class(es) before dropping below {threshold}%."
+                "message": f"You can skip {skippable} more classses."
             }
         else:
             needed = math.ceil((threshold_decimal * total - attended) / (1 - threshold_decimal))
             return {
                 "status": "danger",
                 "needed_classes": needed,
-                "message": f"Below {threshold}%! You must attend {needed} more class(es) to reach {threshold}%."
+                "message": f"Below {threshold}%! attend {needed} more classes to reach {threshold}%."
             }
 
     def get_full_analysis(self):

@@ -53,6 +53,7 @@ body {
 .auth-container::-webkit-scrollbar {
     width: 6px;
 }
+
 .auth-container::-webkit-scrollbar-thumb {
     background: var(--glass-border);
     border-radius: 10px;
@@ -154,7 +155,7 @@ button:hover {
     color: white;
     font-weight: 800;
     letter-spacing: 0;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .chat-subtitle {
@@ -216,16 +217,85 @@ button:hover {
     border-bottom-right-radius: 4px;
 }
 
-.message table {
+/* Premium Table Styling & Glassmorphism */
+.table-wrapper {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 0.5rem;
+    overflow-x: auto;
+    margin: 0.75rem 0;
+    border-radius: 16px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.3);
+    background: rgba(15, 23, 42, 0.4);
 }
 
-.message th, .message td {
-    border: 1px solid var(--glass-border);
-    padding: 0.5rem;
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+.attendance-table th {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(147, 51, 234, 0.25));
+    color: #f8fafc;
+    font-weight: 600;
+    padding: 1rem 1.2rem;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     text-align: left;
+}
+
+.attendance-table td {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    color: #e2e8f0;
+    vertical-align: middle;
+}
+
+.attendance-table tr.table-row {
+    transition: all 0.2s ease;
+}
+
+.attendance-table tr.table-row:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.attendance-table tr.table-row:last-child td {
+    border-bottom: none;
+}
+
+/* Beautiful Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+}
+
+.status-badge.badge-safe {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.5);
+    color: #6ee7b7;
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.status-badge.badge-danger {
+    background: rgba(239, 68, 68, 0.25);
+    border: 1px solid rgba(239, 68, 68, 0.6);
+    color: #fca5a5;
+    text-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+.status-badge.badge-warn {
+    background: rgba(245, 158, 11, 0.2);
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    color: #fcd34d;
+    text-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
 }
 
 .chat-input-area {
@@ -240,14 +310,21 @@ button:hover {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .loader {
     width: 24px;
     height: 24px;
-    border: 3px solid rgba(255,255,255,0.3);
+    border: 3px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     border-top-color: white;
     animation: spin 1s ease-in-out infinite;
@@ -255,5 +332,7 @@ button:hover {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }

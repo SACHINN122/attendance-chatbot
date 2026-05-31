@@ -135,40 +135,66 @@ class ChatbotEngine:
         return response
 
     def _subject_details(self, subject):
-        response = f"**{self._subject_label(subject)}**\n\n"
-        response += "| Metric | Value |\n|:---|:---|\n"
-        response += f"| Attendance | {subject.get('percentage', 0)}% ({subject.get('attended', 0)}/{subject.get('total', 0)}) |\n"
-        response += f"| Absent classes | {subject.get('absent', 0)} |\n"
-        response += f"| 75% status | {self._status_word(subject)} |\n"
-        response += f"| 75% action | {subject.get('message_75', subject.get('message', 'No prediction available'))} |\n"
-        response += f"| 65% action | {subject.get('message_65', 'No prediction available')} |\n"
-        response += f"| Days with absence | {subject.get('absent_days', len(subject.get('absent_dates', [])))} |\n"
+        response = f"### **{self._subject_label(subject)}**\n\n"
+        
+        # Overview Stats
+        response += f"📊 **Overview:**\n"
+        response += f"- **Total Classes Held:** {subject.get('total', 0)}\n"
+        response += f"- **Total Present:** {subject.get('attended', 0)}\n"
+        response += f"- **Total Absent:** {subject.get('absent', 0)}\n"
+        response += f"- **Current Attendance:** **{subject.get('percentage', 0)}%**\n\n"
+        
+        # Leave predictions
+        needed_75 = subject.get('needed_75', 0)
+        skippable_75 = subject.get('skippable_75', 0)
+        status_75 = subject.get('status_75', 'safe')
+        
+        if status_75 == 'danger' or needed_75 > 0:
+            pred_75 = f"Need to attend **{needed_75}** class(es) 🚨"
+        elif status_75 == 'borderline':
+            pred_75 = "Exactly at 75%. Cannot skip any class! ⚠️"
+        else:
+            pred_75 = f"Can skip **{skippable_75}** class(es) safely ✅"
 
-        absent_dates = subject.get("absent_dates") or []
-        if absent_dates:
-            response += "\nRecent absent dates: **" + ", ".join(absent_dates[-8:]) + "**\n"
+        needed_65 = subject.get('needed_65', 0)
+        skippable_65 = subject.get('skippable_65', 0)
+        status_65 = subject.get('status_65', 'safe')
+        
+        if status_65 == 'danger' or needed_65 > 0:
+            pred_65 = f"Need to attend **{needed_65}** class(es) 🚨"
+        elif status_65 == 'borderline':
+            pred_65 = "Exactly at 65%. Cannot skip any class! ⚠️"
+        else:
+            pred_65 = f"Can skip **{skippable_65}** class(es) safely ✅"
 
-        recent = subject.get("recent_activity") or subject.get("day_wise") or []
-        recent = list(recent)[-10:]
-        if recent:
-            response += "\n| Date | Raw mark | Present | Absent | Special |\n"
-            response += "|:---|:---|---:|---:|:---|\n"
-            for event in recent:
-                response += (
-                    f"| {event.get('date', event.get('label', ''))} | {event.get('raw', '')} | "
-                    f"{event.get('present_count', 0)} | {event.get('absent_count', 0)} | "
-                    f"{', '.join(event.get('special_codes', []))} |\n"
-                )
-
-        special = subject.get("special_events") or []
-        if special:
-            response += "\nSpecial marks include: "
-            response += ", ".join(
-                f"{item.get('date')} {item.get('mark')} ({item.get('description')})"
-                for item in special[-5:]
-            )
-            response += ".\n"
-
+        response += f"🔮 **Leave Predictions:**\n"
+        response += f"- **75% Criteria:** {pred_75}\n"
+        response += f"- **65% Criteria:** {pred_65}\n\n"
+        
+        # Day-wise attendance records list
+        response += f"📅 **Daily Attendance Records:**\n"
+        
+        day_wise = subject.get("day_wise") or []
+        if day_wise:
+            sorted_days = sorted(day_wise, key=lambda d: d.get("date", ""), reverse=True)
+            for day in sorted_days:
+                label = day.get("label") or day.get("date") or "Unknown"
+                raw = day.get("raw") or "0"
+                present = day.get("present_count", 0)
+                absent = day.get("absent_count", 0)
+                
+                # Determine circle emoji
+                if present > 0:
+                    circle = "🟢"
+                elif absent > 0:
+                    circle = "🔴"
+                else:
+                    circle = "🟡"
+                
+                response += f"{circle} {label}: {raw}\n"
+        else:
+            response += "*No day-wise records available in cache. Run a fresh sync.*"
+            
         return response
 
     def _match_subject(self, message_lower, subjects):
@@ -331,7 +357,7 @@ class ChatbotEngine:
             return self._website_report(payload)
 
         if not subjects:
-            return "I could not find attendance data yet. Please complete login and CAPTCHA once so I can build the analysis cache."
+            return "I could not find attendance data yet. Please complete login and CAPTCHA once so I can show attendance summary."
 
         if self.state == "waiting_for_subject_number":
             if message.isdigit():
@@ -342,16 +368,15 @@ class ChatbotEngine:
                 return "Invalid number. Type **SW** again and choose a listed subject number."
             self.state = "idle"
 
-        if message_lower in {"hi", "hello", "summary", "dashboard"}:
+        if message_lower in {"hi", "hello", "summary", "dashboard", "attendance","attendance summary"}:
             return self._summary(payload)
 
         if message_lower == "sw" or "subject wise" in message_lower or "subject-wise" in message_lower:
-            self.state = "waiting_for_subject_number"
-            self.subject_map = {index + 1: subject for index, subject in enumerate(subjects)}
-            response = "**Subject-wise attendance**\n\n"
-            for index, subject in self.subject_map.items():
-                response += f"**{index}.** {self._subject_label(subject)} - {subject.get('percentage')}%\n"
-            response += "\nType the serial number for day-wise marks, absent dates, and safe-skip analysis."
+            response = ""
+            for index, subject in enumerate(subjects):
+                response += self._subject_details(subject)
+                if index < len(subjects) - 1:
+                    response += "\n\n---\n\n"
             return response
 
         if "calendar" in message_lower or "holiday" in message_lower or "leave" in message_lower or "gh" in message_lower or "tl" in message_lower:

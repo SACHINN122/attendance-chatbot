@@ -126,7 +126,7 @@ const App = {
         document.getElementById('loginBtn').addEventListener('click', async () => {
             const btn = document.getElementById('loginBtn');
             btn.innerHTML = '<div class="loader"></div>';
-            
+
             const roll = document.getElementById('rollno').value;
             const pwd = document.getElementById('password').value;
             const rememberPassword = document.getElementById('rememberPassword').checked;
@@ -137,7 +137,7 @@ const App = {
                 body: JSON.stringify({ rollno: roll, password: pwd })
             });
             const data = await res.json();
-            
+
             if (data.success) {
                 sessionId = data.session_id;
                 rollNo = data.rollno || roll;
@@ -211,7 +211,7 @@ const App = {
                     // fallback to existing flow
                 }
             }
-            
+
             const cap = document.getElementById('captchaInput').value;
             const res = await fetch('/api/captcha', {
                 method: 'POST',
@@ -219,7 +219,7 @@ const App = {
                 body: JSON.stringify({ session_id: sessionId, captcha: cap })
             });
             const data = await res.json();
-            
+
             if (data.success) {
                 localStorage.setItem('nsut_rollno', rollNo);
                 this.renderChat(data.data);
@@ -237,44 +237,44 @@ const App = {
                 alert((data.message || 'Verification failed') + dbg);
             }
         });
-       
-           document.getElementById('autoOcrBtn').addEventListener('click', async () => {
-               const btn = document.getElementById('autoOcrBtn');
-               const originalText = btn.innerHTML;
-               btn.innerHTML = '⏳ Reading...';
-               btn.disabled = true;
-           
-               try {
-                   const res = await fetch('/api/captcha', {
-                       method: 'POST',
-                       headers: { 'Content-Type': 'application/json' },
-                       body: JSON.stringify({ session_id: sessionId, auto_ocr: true })
-                   });
-                   const data = await res.json();
-               
-                   if (data.success) {
-                       localStorage.setItem('nsut_rollno', rollNo);
-                       this.renderChat(data.data);
-                       const warning = data.live_sync_warning
-                           ? `\n\n**Live sync note:** ${data.live_sync_warning}. Debug folder: ${data.debug_dir || 'not available'}`
-                           : "";
-                       this.addBotMessage("CAPTCHA auto-read with OCR. " + data.message + warning + "\n\nType **HI** for the full dashboard or **CODES** for shortcuts.");
-                   } else {
-                       btn.innerHTML = originalText;
-                       btn.disabled = false;
-                       if (data.retryable && data.captcha_base64) {
-                           document.getElementById('captchaImg').src = data.captcha_base64;
-                           captchaIssuedAt = Date.now();
-                       }
-                       const dbg = data.debug_dir ? `\n\nDebug folder: ${data.debug_dir}` : '';
-                       alert("❌ OCR failed: " + data.message + "\n\nYou can retry OCR or enter CAPTCHA manually without re-login." + dbg);
-                   }
-               } catch (e) {
-                   btn.innerHTML = originalText;
-                   btn.disabled = false;
-                   alert("❌ Error: " + e.message);
-               }
-           });
+
+        document.getElementById('autoOcrBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('autoOcrBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '⏳ Reading...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/captcha', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_id: sessionId, auto_ocr: true })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    localStorage.setItem('nsut_rollno', rollNo);
+                    this.renderChat(data.data);
+                    const warning = data.live_sync_warning
+                        ? `\n\n**Live sync note:** ${data.live_sync_warning}. Debug folder: ${data.debug_dir || 'not available'}`
+                        : "";
+                    this.addBotMessage("CAPTCHA auto-read with OCR. " + data.message + warning + "\n\nType **HI** for the full dashboard or **CODES** for shortcuts.");
+                } else {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    if (data.retryable && data.captcha_base64) {
+                        document.getElementById('captchaImg').src = data.captcha_base64;
+                        captchaIssuedAt = Date.now();
+                    }
+                    const dbg = data.debug_dir ? `\n\nDebug folder: ${data.debug_dir}` : '';
+                    alert("❌ OCR failed: " + data.message + "\n\nYou can retry OCR or enter CAPTCHA manually without re-login." + dbg);
+                }
+            } catch (e) {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert("❌ Error: " + e.message);
+            }
+        });
     },
 
     renderChat(analysis = null) {
@@ -367,44 +367,73 @@ const App = {
     addBotMessage(markdown) {
         const div = document.createElement('div');
         div.className = 'message bot';
-        
+
         // Very simple markdown parser for bold, lists, and tables
         let html = markdown
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\n/g, '<br>');
-        
-        // Handle tables (basic implementation)
+
+        // Handle tables with premium styles and status badges
         if (html.includes('|')) {
             const lines = html.split('<br>');
             let inTable = false;
-            let tableHtml = '<table style="width:100%; border-collapse: collapse; margin-top: 10px;">';
-            
+            let isHeader = true;
+            let tableHtml = '';
+
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i].trim();
                 if (line.startsWith('|')) {
-                    inTable = true;
-                    if (line.includes('---')) {
-                        lines[i] = ''; 
-                        continue; 
+                    if (!inTable) {
+                        inTable = true;
+                        isHeader = true;
+                        tableHtml = '<div class="table-wrapper"><table class="attendance-table">';
                     }
-                    
+                    if (line.includes('---')) {
+                        isHeader = false;
+                        lines[i] = '';
+                        continue;
+                    }
+
                     const cells = line.split('|').filter(c => c.trim() !== '');
-                    tableHtml += '<tr>';
+                    tableHtml += '<tr' + (isHeader ? ' class="table-header"' : ' class="table-row"') + '>';
                     cells.forEach(c => {
-                        tableHtml += `<td style="border: 1px solid var(--glass-border); padding: 8px;">${c.trim()}</td>`;
+                        let content = c.trim();
+
+                        if (!isHeader) {
+                            // Check for attendance percentage or status words
+                            const pctMatch = content.match(/(\d+(\.\d+)?)%/);
+                            if (pctMatch) {
+                                const pct = parseFloat(pctMatch[1]);
+                                const badgeType = pct < 75 ? 'badge-danger' : 'badge-safe';
+                                content = `<span class="status-badge ${badgeType}">${content}</span>`;
+                            } else if (content.startsWith('Attend ') || content === 'Short' || content === 'Danger') {
+                                content = `<span class="status-badge badge-danger">${content}</span>`;
+                            } else if (content.startsWith('Skip ') || content === 'Safe') {
+                                content = `<span class="status-badge badge-safe">${content}</span>`;
+                            } else if (content === 'Borderline') {
+                                content = `<span class="status-badge badge-warn">${content}</span>`;
+                            }
+                        }
+
+                        const tag = isHeader ? 'th' : 'td';
+                        tableHtml += `<${tag}>${content}</${tag}>`;
                     });
                     tableHtml += '</tr>';
                     lines[i] = ''; // clear line
                 } else if (inTable) {
                     inTable = false;
-                    tableHtml += '</table>';
+                    tableHtml += '</table></div>';
                     lines[i] = tableHtml + '<br>' + lines[i];
                     tableHtml = '';
                 }
             }
-            if (inTable) tableHtml += '</table>';
+            if (inTable) {
+                tableHtml += '</table></div>';
+            }
             html = lines.filter(l => l !== '').join('<br>');
-            if (inTable) html += tableHtml;
+            if (inTable) {
+                html += tableHtml;
+            }
         }
 
         div.innerHTML = html;
