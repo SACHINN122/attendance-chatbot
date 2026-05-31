@@ -286,7 +286,7 @@ sequenceDiagram
 
     Analyzer->>Scraper: Full analysis JSON
 
-    Scraper->>Cache: Save to<br/>backend/data/2024UME4116.json
+    Scraper->>Cache: Save to<br/>backend/data/&lt;roll_no&gt;.json
 
     Scraper->>API: {success: true,<br/>message: "Data synced!"}
 
@@ -333,9 +333,9 @@ sequenceDiagram
 
 ```
 backend/data/
-├── 2024UME4116.json          ← Your roll number
-├── 2024UME4117.json
-└── 2024UME4118.json
+├── <roll_no>.json
+├── <another_roll_no>.json
+└── <third_roll_no>.json
 ```
 
 **Each file contains:** Array of subject objects with full analysis.
