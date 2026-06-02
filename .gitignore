@@ -1,4 +1,4 @@
-ÿþ# Python cache
+# Python cache
 __pycache__/
 backend/__pycache__/
 *.py[cod]
@@ -11,19 +11,19 @@ env/
 venv/
 ENV/
 
-# Scrape/debug folder
+# Scraper/debug folder
 backend/scrape/
 backend/data/
-.playwright-mcp/
+.playwright-icp/
 
 # Optional data
 *.png
 *.jpg
 *.jpeg
 *.gif
-*_debug*
-debug_*
+*debug*
+debug_/
 node_modules/
 .DS_Store
 .idea/
-.vscode
+.vscode/

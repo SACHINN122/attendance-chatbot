@@ -899,6 +899,7 @@ class AttendanceScraper:
         filter_attempt = 0
         all_attendance_data = []
         success_filters = []
+        processed_combinations = set()
         merged_payload = {
             "student": {},
             "subjects": [],
@@ -967,19 +968,27 @@ class AttendanceScraper:
                     selected_year_value = year or attendance_payload.get("student", {}).get("academic_year", "")
                     selected_semester_value = semester or attendance_payload.get("student", {}).get("semester", "")
 
-                    for subject in attendance_data:
-                        subject["academic_year"] = selected_year_value
-                        subject["semester"] = selected_semester_value
+                    actual_student = attendance_payload.get("student") or {}
+                    actual_sem = actual_student.get("semester") or selected_semester_value
+                    actual_year = actual_student.get("academic_year") or selected_year_value
 
-                    merged_payload["student"].update({
-                        key: value
-                        for key, value in (attendance_payload.get("student") or {}).items()
-                        if value
-                    })
-                    merged_payload["status_legend"].update(attendance_payload.get("status_legend") or {})
-                    merged_payload["calendar"].extend(attendance_payload.get("calendar") or [])
-                    merged_payload["subjects"].extend(attendance_data)
-                    all_attendance_data.extend(attendance_data)
+                    comb_key = (actual_year, actual_sem)
+                    if comb_key not in processed_combinations:
+                        processed_combinations.add(comb_key)
+
+                        for subject in attendance_data:
+                            subject["academic_year"] = actual_year
+                            subject["semester"] = actual_sem
+
+                        merged_payload["student"].update({
+                            key: value
+                            for key, value in (attendance_payload.get("student") or {}).items()
+                            if value
+                        })
+                        merged_payload["status_legend"].update(attendance_payload.get("status_legend") or {})
+                        merged_payload["calendar"].extend(attendance_payload.get("calendar") or [])
+                        merged_payload["subjects"].extend(attendance_data)
+                        all_attendance_data.extend(attendance_data)
 
                     success_filter = {
                         "year": selected_year_value,
@@ -2042,8 +2051,34 @@ class AttendanceScraper:
                 "message": f"Below {threshold}%! attend {needed} more classes to reach {threshold}%."
             }
 
+    def deduplicate_and_recompute(self, analysis):
+        if not analysis or not isinstance(analysis, dict) or "attendance" not in analysis:
+            return analysis
+        
+        subjects = analysis.get("attendance") or []
+        seen = set()
+        deduped = []
+        for s in subjects:
+            key = (s.get("code"), s.get("academic_year"), s.get("semester"))
+            if key not in seen:
+                seen.add(key)
+                deduped.append(s)
+        
+        if len(deduped) == len(subjects):
+            return analysis
+            
+        new_analysis = self._compute_full_analysis(
+            deduped,
+            attendance_payload=analysis.get("source"),
+            portal_catalog=analysis.get("portal")
+        )
+        if "student" in analysis:
+            new_analysis["student"] = analysis["student"]
+        return new_analysis
+
     def get_full_analysis(self):
         if self.cached_analysis:
+            self.cached_analysis = self.deduplicate_and_recompute(self.cached_analysis)
             return self.cached_analysis
         return {
             "schema_version": 2,

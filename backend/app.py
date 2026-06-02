@@ -64,7 +64,19 @@ def _load_cached_analysis(rollno):
     if not cache_file or not os.path.exists(cache_file):
         return None
     with open(cache_file, "r", encoding="utf-8") as f:
-        return json.load(f)
+        data = json.load(f)
+    
+    scraper = AttendanceScraper(use_mock=True)
+    cleaned_data = scraper.deduplicate_and_recompute(data)
+    
+    if cleaned_data != data:
+        try:
+            with open(cache_file, "w", encoding="utf-8") as f:
+                json.dump(cleaned_data, f)
+        except:
+            pass
+            
+    return cleaned_data
 
 def _merge_live_profile(analysis, scraper):
     """Attach safe profile hints from the authenticated portal to cached analysis."""
