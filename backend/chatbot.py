@@ -92,57 +92,60 @@ class ChatbotEngine:
 
     def _summary(self, payload):
         subjects = self._subjects(payload)
-        insights = payload.get("insights") or {}
-        student = payload.get("student") or {}
-        source = payload.get("source") or {}
-        name = student.get("name") or "student"
-        semester = source.get("semester") or student.get("semester") or "current"
-        year = source.get("academic_year") or student.get("academic_year") or "selected"
+        if not subjects:
+            return "No attendance data available."
 
-        response = f"**Login accepted. Attendance analysis ready for {name}.**\n\n"
-        response += (
-            f"Overall: **{insights.get('overall_percentage', 0)}%** "
-            f"({insights.get('total_attended', 0)}/{insights.get('total_classes', 0)}) "
-            f"for semester **{semester}**, academic year **{year}**.\n"
-        )
-        response += (
-            f"Total absent classes: **{insights.get('total_absent', 0)}**. "
-            f"Subjects tracked: **{insights.get('subject_count', len(subjects))}**. "
-            f"Safe skips at 75%: **{insights.get('total_skippable_75', 0)}**.\n\n"
-        )
-        if source.get("legacy_cache"):
-            response += (
-                "**Cache note:** this is an older totals-only cache. "
-                "The shortcut commands work, but date-wise absences, portal profile fields, "
-                "calendar marks, and website-surface mapping need one fresh portal login to rebuild the v2 cache.\n\n"
-            )
+        lines = ["*Attendance Summary:*"]
+        for subject in subjects:
+            code = subject.get("code") or "Unknown"
+            name = subject.get("subject") or "Unknown"
+            pct = subject.get("percentage", 0.0)
+            att = subject.get("attended", 0)
+            tot = subject.get("total", 0)
 
-        lowest = insights.get("lowest_subject")
-        strongest = insights.get("strongest_subject")
-        if lowest:
-            response += f"Weakest right now: **{lowest.get('code')}** at **{lowest.get('percentage')}%**.\n"
-        if strongest:
-            response += f"Strongest right now: **{strongest.get('code')}** at **{strongest.get('percentage')}%**.\n"
+            # 75% prediction
+            needed_75 = subject.get('needed_75', 0)
+            skippable_75 = subject.get('skippable_75', 0)
+            status_75 = subject.get('status_75', 'safe')
+            if status_75 == 'danger' or needed_75 > 0:
+                pred_75 = f"Need to attend {needed_75} classes 🚨"
+            elif status_75 == 'borderline':
+                pred_75 = "Exactly at 75%. Cannot skip any class! ⚠️"
+            else:
+                pred_75 = f"Can skip {skippable_75} classes safely ✅"
 
-        risky = insights.get("risky_subjects") or []
-        if risky:
-            response += f"\nSubjects needing attention: **{len(risky)}**. Type **RISK** for the list.\n"
-        else:
-            response += "\nNo subject is below 75%, but borderline subjects still need care.\n"
+            # 65% prediction
+            needed_65 = subject.get('needed_65', 0)
+            skippable_65 = subject.get('skippable_65', 0)
+            status_65 = subject.get('status_65', 'safe')
+            if status_65 == 'danger' or needed_65 > 0:
+                pred_65 = f"Need to attend {needed_65} classes 🚨"
+            elif status_65 == 'borderline':
+                pred_65 = "Exactly at 65%. Cannot skip any class! ⚠️"
+            else:
+                pred_65 = f"Can skip {skippable_65} classes safely ✅"
 
-        response += "\n" + self._build_subject_table(subjects)
-        response += "\nTry: **SW**, **TOTAL**, **ABSENT**, **SAFE**, **RISK**, **PROFILE**, **CALENDAR**, **WEBSITE**, or a subject code like **MEMEC303**."
-        return response
+            lines.append("")
+            lines.append(f"{code}: {name}")
+            lines.append(f"✅ Total: *{pct}%* ({att}/{tot})")
+            lines.append("🔮 Leave Predictions:")
+            lines.append(f"- 75% Criteria: {pred_75}")
+            lines.append(f"- 65% Criteria: {pred_65}")
+
+        return "\n".join(lines)
 
     def _subject_details(self, subject):
-        response = f"### **{self._subject_label(subject)}**\n\n"
+        code = subject.get("code") or "Unknown"
+        name = subject.get("subject") or "Unknown"
+        
+        response = f"### {code} - {name}\n\n"
         
         # Overview Stats
-        response += f"📊 **Overview:**\n"
-        response += f"- **Total Classes Held:** {subject.get('total', 0)}\n"
-        response += f"- **Total Present:** {subject.get('attended', 0)}\n"
-        response += f"- **Total Absent:** {subject.get('absent', 0)}\n"
-        response += f"- **Current Attendance:** **{subject.get('percentage', 0)}%**\n\n"
+        response += f"📊 Overview:\n"
+        response += f"- Total Classes Held: {subject.get('total', 0)}\n"
+        response += f"- Total Present: {subject.get('attended', 0)}\n"
+        response += f"- Total Absent: {subject.get('absent', 0)}\n"
+        response += f"- Current Attendance: {subject.get('percentage', 0)}%\n\n"
         
         # Leave predictions
         needed_75 = subject.get('needed_75', 0)
@@ -150,29 +153,29 @@ class ChatbotEngine:
         status_75 = subject.get('status_75', 'safe')
         
         if status_75 == 'danger' or needed_75 > 0:
-            pred_75 = f"Need to attend **{needed_75}** class(es) 🚨"
+            pred_75 = f"Need to attend {needed_75} class(es) 🚨"
         elif status_75 == 'borderline':
             pred_75 = "Exactly at 75%. Cannot skip any class! ⚠️"
         else:
-            pred_75 = f"Can skip **{skippable_75}** class(es) safely ✅"
+            pred_75 = f"Can skip {skippable_75} class(es) safely ✅"
 
         needed_65 = subject.get('needed_65', 0)
         skippable_65 = subject.get('skippable_65', 0)
         status_65 = subject.get('status_65', 'safe')
         
         if status_65 == 'danger' or needed_65 > 0:
-            pred_65 = f"Need to attend **{needed_65}** class(es) 🚨"
+            pred_65 = f"Need to attend {needed_65} class(es) 🚨"
         elif status_65 == 'borderline':
             pred_65 = "Exactly at 65%. Cannot skip any class! ⚠️"
         else:
-            pred_65 = f"Can skip **{skippable_65}** class(es) safely ✅"
+            pred_65 = f"Can skip {skippable_65} class(es) safely ✅"
 
-        response += f"🔮 **Leave Predictions:**\n"
-        response += f"- **75% Criteria:** {pred_75}\n"
-        response += f"- **65% Criteria:** {pred_65}\n\n"
+        response += f"🔮 Leave Predictions:\n"
+        response += f"- 75% Criteria: {pred_75}\n"
+        response += f"- 65% Criteria: {pred_65}\n\n"
         
         # Day-wise attendance records list
-        response += f"📅 **Daily Attendance Records:**\n"
+        response += f"📅 Daily Attendance Records:\n"
         
         day_wise = subject.get("day_wise") or []
         if day_wise:
@@ -384,11 +387,15 @@ class ChatbotEngine:
             return self._summary(payload)
 
         if message_lower == "sw" or "subject wise" in message_lower or "subject-wise" in message_lower:
-            response = ""
+            self.subject_map = {i + 1: subj for i, subj in enumerate(subjects)}
+            self.state = "waiting_for_subject_number"
+            
+            response = "Select a subject by number to view detailed reports:\n\n"
             for index, subject in enumerate(subjects):
-                response += self._subject_details(subject)
-                if index < len(subjects) - 1:
-                    response += "\n\n---\n\n"
+                code = subject.get("code") or "Unknown"
+                name = subject.get("subject") or "Unknown"
+                response += f"{index + 1}. **{code}**: {name}\n"
+            response += "\nType the number of the subject."
             return response
 
         if "calendar" in message_lower or "holiday" in message_lower or "leave" in message_lower or "gh" in message_lower or "tl" in message_lower:

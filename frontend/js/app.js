@@ -13,6 +13,17 @@ let dashboardFilters = {
     search: ''
 };
 
+const funnyMessages = [
+    "Hacking mainframe with raw CSS... 😎💻",
+    "Routing traffic via NASA satellite... 🚀👽",
+    "Calling Elon Musk... 📞🤑",
+    "Decrypting teacher's handwriting... 🧐📝",
+    "Negotiating with server to not crash... 🥺🙏",
+    "Asking Siri if we should bunk tomorrow... 🤔📱",
+    "Compiling 99 excuses for bunking... 🤫📝",
+    "Mining Dogecoin to pay server bills... 🐕🤑"
+];
+
 const App = {
     async init() {
         await this.loadConfig();
@@ -546,11 +557,73 @@ const App = {
 
     renderLoading(text) {
         document.getElementById('app').innerHTML = `
-            <div class="glass-panel" style="margin: auto; padding: 3rem; text-align: center;">
-                <div class="loader"></div>
+            <div class="glass-panel" style="margin: auto; padding: 3rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                <div class="funny-spinner">
+                    <div class="funny-spinner-outer"></div>
+                    <div class="funny-spinner-inner"></div>
+                </div>
                 <p style="margin-top: 1rem; color: var(--text-secondary);">${text}</p>
             </div>
         `;
+    },
+
+    showFunnyLoader(titleText) {
+        let overlay = document.getElementById('funny-loader-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'funny-loader-overlay';
+            overlay.className = 'funny-loader-overlay';
+            overlay.innerHTML = `
+                <div class="funny-spinner">
+                    <div class="funny-spinner-outer"></div>
+                    <div class="funny-spinner-inner"></div>
+                </div>
+                <h3 id="funny-loader-title"></h3>
+                <p id="funny-loader-text"></p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill"></div>
+                </div>
+            `;
+            const authContainer = document.querySelector('.auth-container');
+            if (authContainer) {
+                authContainer.style.position = 'relative';
+                authContainer.appendChild(overlay);
+            }
+        }
+        
+        document.getElementById('funny-loader-title').textContent = titleText;
+        overlay.classList.remove('hidden');
+        
+        const textEl = document.getElementById('funny-loader-text');
+        let currentIdx = Math.floor(Math.random() * funnyMessages.length);
+        
+        const updateText = () => {
+            if (!textEl) return;
+            textEl.style.opacity = 0;
+            setTimeout(() => {
+                const el = document.getElementById('funny-loader-text');
+                if (el) {
+                    el.textContent = funnyMessages[currentIdx];
+                    el.style.opacity = 1;
+                }
+                currentIdx = (currentIdx + 1) % funnyMessages.length;
+            }, 300);
+        };
+        
+        updateText();
+        if (this.loaderInterval) clearInterval(this.loaderInterval);
+        this.loaderInterval = setInterval(updateText, 2200);
+    },
+
+    hideFunnyLoader() {
+        const overlay = document.getElementById('funny-loader-overlay');
+        if (overlay) {
+            overlay.classList.add('hidden');
+        }
+        if (this.loaderInterval) {
+            clearInterval(this.loaderInterval);
+            this.loaderInterval = null;
+        }
     },
 
     renderLogin(initialRoll = '') {
@@ -568,7 +641,10 @@ const App = {
                     <input type="text" id="rollno" placeholder="Roll number" value="${savedRollValue}">
                 </div>
                 <div class="input-group">
-                    <input type="password" id="password" placeholder="${passwordPlaceholder}" value="${savedPasswordValue}">
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="${passwordPlaceholder}" value="${savedPasswordValue}">
+                        <button type="button" id="togglePasswordBtn" class="toggle-password-btn" title="Toggle password visibility">👁️</button>
+                    </div>
                 </div>
                 <label class="check-row">
                     <input type="checkbox" id="rememberPassword" ${savedPasswordChecked}>
@@ -588,38 +664,52 @@ const App = {
             </div>
         `;
 
-        document.getElementById('loginBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('loginBtn');
-            btn.innerHTML = '<div class="loader"></div>';
+        const toggleBtn = document.getElementById('togglePasswordBtn');
+        const passwordInput = document.getElementById('password');
+        if (toggleBtn && passwordInput) {
+            toggleBtn.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                toggleBtn.textContent = type === 'password' ? '👁️' : '🙈';
+            });
+        }
 
+        document.getElementById('loginBtn').addEventListener('click', async () => {
             const roll = document.getElementById('rollno').value;
             const pwd = document.getElementById('password').value;
             const rememberPassword = document.getElementById('rememberPassword').checked;
 
-            const res = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ rollno: roll, password: pwd })
-            });
-            const data = await res.json();
+            this.showFunnyLoader("Connecting to Student Portal");
 
-            if (data.success) {
-                sessionId = data.session_id;
-                rollNo = data.rollno || roll;
-                localStorage.setItem('nsut_rollno', rollNo);
-                if (rememberPassword && pwd) {
-                    localStorage.setItem('nsut_portal_password', pwd);
-                } else if (!rememberPassword) {
-                    localStorage.removeItem('nsut_portal_password');
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ rollno: roll, password: pwd })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    sessionId = data.session_id;
+                    rollNo = data.rollno || roll;
+                    localStorage.setItem('nsut_rollno', rollNo);
+                    if (rememberPassword && pwd) {
+                        localStorage.setItem('nsut_portal_password', pwd);
+                    } else if (!rememberPassword) {
+                        localStorage.removeItem('nsut_portal_password');
+                    }
+                    autoOcrTried = false;
+                    document.getElementById('loginBtn').style.display = 'none';
+                    document.getElementById('captchaArea').style.display = 'flex';
+                    document.getElementById('captchaImg').src = data.captcha_base64;
+                    captchaIssuedAt = Date.now();
+                } else {
+                    alert(data.message);
                 }
-                autoOcrTried = false;
-                btn.style.display = 'none';
-                document.getElementById('captchaArea').style.display = 'flex';
-                document.getElementById('captchaImg').src = data.captcha_base64;
-                captchaIssuedAt = Date.now();
-            } else {
-                btn.innerHTML = 'Connect to Portal';
-                alert(data.message);
+            } catch (e) {
+                alert('Connection error: ' + e.message);
+            } finally {
+                this.hideFunnyLoader();
             }
         });
 
@@ -653,10 +743,8 @@ const App = {
         });
 
         document.getElementById('verifyBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('verifyBtn');
-            btn.innerHTML = '<div class="loader"></div>';
-
             if (captchaIssuedAt && (Date.now() - captchaIssuedAt) > 45000) {
+                this.showFunnyLoader("Refreshing CAPTCHA Session");
                 try {
                     const refreshRes = await fetch('/api/captcha/refresh', {
                         method: 'POST',
@@ -668,46 +756,51 @@ const App = {
                         document.getElementById('captchaImg').src = refreshData.captcha_base64;
                         document.getElementById('captchaInput').value = '';
                         captchaIssuedAt = Date.now();
-                        btn.innerHTML = 'Verify & Deep Scrape';
                         alert('Captcha was refreshed because previous one got old. Please type the new captcha and submit again.');
                         return;
                     }
                 } catch (e) {
                     // fallback to existing flow
+                } finally {
+                    this.hideFunnyLoader();
                 }
             }
 
             const cap = document.getElementById('captchaInput').value;
-            const res = await fetch('/api/captcha', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ session_id: sessionId, captcha: cap })
-            });
-            const data = await res.json();
+            this.showFunnyLoader("Bypassing Mainframe & Scraping Data");
 
-            if (data.success) {
-                localStorage.setItem('nsut_rollno', rollNo);
-                this.renderChat(data.data);
-                const warning = data.live_sync_warning
-                    ? `\n\n**Live sync note:** ${data.live_sync_warning}. Debug folder: ${data.debug_dir || 'not available'}`
-                    : "";
-                this.addBotMessage(data.message + warning + "\n\nType **HI** for the full dashboard, **PROFILE** for student info, **CODES** for shortcuts, or ask a subject code like **MEMEC303**.");
-            } else {
-                btn.innerHTML = 'Verify & Deep Scrape';
-                if (data.retryable && data.captcha_base64) {
-                    document.getElementById('captchaImg').src = data.captcha_base64;
-                    captchaIssuedAt = Date.now();
+            try {
+                const res = await fetch('/api/captcha', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_id: sessionId, captcha: cap })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    localStorage.setItem('nsut_rollno', rollNo);
+                    this.renderChat(data.data);
+                    const warning = data.live_sync_warning
+                        ? `\n\n**Live sync note:** ${data.live_sync_warning}. Debug folder: ${data.debug_dir || 'not available'}`
+                        : "";
+                    this.addBotMessage(data.message + warning + "\n\nType **HI** for the full dashboard, **PROFILE** for student info, **CODES** for shortcuts, or ask a subject code like **MEMEC303**.");
+                } else {
+                    if (data.retryable && data.captcha_base64) {
+                        document.getElementById('captchaImg').src = data.captcha_base64;
+                        captchaIssuedAt = Date.now();
+                    }
+                    const dbg = data.debug_dir ? `\n\nDebug folder: ${data.debug_dir}` : '';
+                    alert((data.message || 'Verification failed') + dbg);
                 }
-                const dbg = data.debug_dir ? `\n\nDebug folder: ${data.debug_dir}` : '';
-                alert((data.message || 'Verification failed') + dbg);
+            } catch (e) {
+                alert('Scrape failed: ' + e.message);
+            } finally {
+                this.hideFunnyLoader();
             }
         });
 
         document.getElementById('autoOcrBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('autoOcrBtn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '⏳ Reading...';
-            btn.disabled = true;
+            this.showFunnyLoader("Triggering AI Captcha Solver");
 
             try {
                 const res = await fetch('/api/captcha', {
@@ -725,8 +818,6 @@ const App = {
                         : "";
                     this.addBotMessage("CAPTCHA auto-read with OCR. " + data.message + warning + "\n\nType **HI** for the full dashboard or **CODES** for shortcuts.");
                 } else {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
                     if (data.retryable && data.captcha_base64) {
                         document.getElementById('captchaImg').src = data.captcha_base64;
                         captchaIssuedAt = Date.now();
@@ -735,9 +826,9 @@ const App = {
                     alert("❌ OCR failed: " + data.message + "\n\nYou can retry OCR or enter CAPTCHA manually without re-login." + dbg);
                 }
             } catch (e) {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
                 alert("❌ Error: " + e.message);
+            } finally {
+                this.hideFunnyLoader();
             }
         });
     },
