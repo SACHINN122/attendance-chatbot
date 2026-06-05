@@ -15,6 +15,11 @@ ENV/
 backend/scrape/
 backend/data/
 .playwright-icp/
+.playwright-mcp/
+
+# Test/scratch files
+scratch/
+frontend/test_css.html
 
 # Optional data
 *.png

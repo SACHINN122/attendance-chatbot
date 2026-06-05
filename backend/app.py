@@ -331,12 +331,13 @@ def chat():
     data = request.json or {}
     session_id = data.get('session_id')
     user_message = data.get('message', '')
+    semester = data.get('semester')
     
     if session_id not in user_sessions:
         return jsonify({"reply": "Please login first. Session expired."}), 401
         
     chatbot = user_sessions[session_id]["chatbot"]
-    reply = chatbot.process_message(user_message)
+    reply = chatbot.process_message(user_message, semester=semester)
     return jsonify({"reply": reply, "assistant_version": APP_VERSION})
 
 

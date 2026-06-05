@@ -120,6 +120,17 @@ const App = {
         return [...new Set(subjects.map((subject) => this.subjectSemester(subject)).filter(Boolean))];
     },
 
+    getLatestSemester(subjects) {
+        const semesterOptions = this.getSemesterOptions(subjects);
+        if (!semesterOptions.length) return 'all';
+        const nums = semesterOptions.map((s) => Number(s)).filter((n) => Number.isFinite(n));
+        if (nums.length > 0) {
+            return String(Math.max(...nums));
+        }
+        const sorted = [...semesterOptions].sort();
+        return sorted[sorted.length - 1];
+    },
+
     inDateRange(date) {
         if (!date) return false;
         const key = String(date).slice(0, 10);
@@ -190,6 +201,12 @@ const App = {
             });
 
         if (dashboardFilters.status === 'all') return rows;
+        if (dashboardFilters.status === 'below_75') {
+            return rows.filter((row) => row.stats.percentage < 75);
+        }
+        if (dashboardFilters.status === 'below_65') {
+            return rows.filter((row) => row.stats.percentage < 65);
+        }
         return rows.filter((row) => row.status === dashboardFilters.status);
     },
 
@@ -395,7 +412,11 @@ const App = {
         const syncLabel = syncDate && !Number.isNaN(syncDate.getTime())
             ? syncDate.toLocaleString()
             : 'Not synced';
-        const subjectOptions = subjects.map((subject) => {
+        const filteredSubjects = dashboardFilters.semester === 'all'
+            ? subjects
+            : subjects.filter((subject) => this.subjectSemester(subject) === dashboardFilters.semester);
+
+        const subjectOptions = filteredSubjects.map((subject) => {
             const value = this.subjectFilterValue(subject);
             const label = semesterOptions.length > 1
                 ? `Sem ${this.subjectSemester(subject)} - ${this.subjectLabel(subject)}`
@@ -424,7 +445,6 @@ const App = {
                 <label class="dashboard-control">
                     <span>Semester</span>
                     <select id="dashSemester">
-                        <option value="all" ${dashboardFilters.semester === 'all' ? 'selected' : ''}>All semesters</option>
                         ${semesterOptions.map((semester) => `<option value="${this.escapeAttr(semester)}" ${dashboardFilters.semester === semester ? 'selected' : ''}>${this.escapeHtml(semester)}</option>`).join('')}
                     </select>
                 </label>
@@ -440,9 +460,8 @@ const App = {
                     <span>Status</span>
                     <select id="dashStatus">
                         <option value="all" ${dashboardFilters.status === 'all' ? 'selected' : ''}>All</option>
-                        <option value="risk" ${dashboardFilters.status === 'risk' ? 'selected' : ''}>Below 75%</option>
-                        <option value="watch" ${dashboardFilters.status === 'watch' ? 'selected' : ''}>75-80%</option>
-                        <option value="safe" ${dashboardFilters.status === 'safe' ? 'selected' : ''}>80%+</option>
+                        <option value="below_75" ${dashboardFilters.status === 'below_75' ? 'selected' : ''}>Below 75%</option>
+                        <option value="below_65" ${dashboardFilters.status === 'below_65' ? 'selected' : ''}>Below 65%</option>
                     </select>
                 </label>
                 <label class="dashboard-control dashboard-search">
@@ -508,7 +527,24 @@ const App = {
         };
 
         bind('dashSubject', 'subject');
-        bind('dashSemester', 'semester');
+        
+        const dashSemester = document.getElementById('dashSemester');
+        if (dashSemester) {
+            dashSemester.addEventListener('change', () => {
+                dashboardFilters.semester = dashSemester.value;
+                if (dashboardFilters.subject !== 'all') {
+                    const subjects = this.getSubjects();
+                    const valid = subjects.some(subject => {
+                        return this.subjectSemester(subject) === dashboardFilters.semester && 
+                               this.subjectFilterValue(subject) === dashboardFilters.subject;
+                    });
+                    if (!valid) {
+                        dashboardFilters.subject = 'all';
+                    }
+                }
+                this.renderDashboard();
+            });
+        }
         bind('dashFrom', 'from');
         bind('dashTo', 'to');
         bind('dashStatus', 'status');
@@ -517,9 +553,10 @@ const App = {
         const reset = document.getElementById('dashReset');
         if (reset) {
             reset.addEventListener('click', () => {
+                const subjects = this.getSubjects();
                 dashboardFilters = {
                     subject: 'all',
-                    semester: 'all',
+                    semester: this.getLatestSemester(subjects),
                     status: 'all',
                     from: '',
                     to: '',
@@ -628,7 +665,7 @@ const App = {
 
     renderLogin(initialRoll = '') {
         const savedPassword = localStorage.getItem('nsut_portal_password') || '';
-        const passwordPlaceholder = appConfig.has_saved_password ? 'Password saved in .env' : 'Password';
+        const passwordPlaceholder = appConfig.has_saved_password ? 'Password saved in .env' : 'Enter Password';
         const savedPasswordChecked = savedPassword ? 'checked' : '';
         const savedPasswordValue = this.escapeAttr(savedPassword);
         const savedRollValue = this.escapeAttr(initialRoll || localStorage.getItem('nsut_rollno') || appConfig.default_rollno || '');
@@ -638,7 +675,7 @@ const App = {
                 <h1>Attendance Assistant</h1>
                 <p style="color: var(--text-secondary)">Connect once, then use the cached assistant workspace.</p>
                 <div class="input-group">
-                    <input type="text" id="rollno" placeholder="Roll number" value="${savedRollValue}">
+                    <input type="text" id="rollno" placeholder="Enter User ID" value="${savedRollValue}">
                 </div>
                 <div class="input-group">
                     <div class="password-wrapper">
@@ -835,6 +872,12 @@ const App = {
 
     renderChat(analysis = null) {
         currentAnalysis = analysis;
+        if (analysis) {
+            const subjects = this.getSubjects();
+            dashboardFilters.semester = this.getLatestSemester(subjects);
+        } else {
+            dashboardFilters.semester = 'all';
+        }
         const insights = analysis && analysis.insights ? analysis.insights : null;
         const student = analysis && analysis.student ? analysis.student : {};
         const source = analysis && analysis.source ? analysis.source : {};
@@ -900,7 +943,11 @@ const App = {
                 const res = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ session_id: sessionId, message: msg })
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        message: msg,
+                        semester: dashboardFilters.semester
+                    })
                 });
                 const data = await res.json();
                 this.addBotMessage(data.reply);

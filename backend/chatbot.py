@@ -30,6 +30,11 @@ class ChatbotEngine:
     def analysis_payload(self):
         return self._payload()
 
+    def _subject_semester(self, subject, payload):
+        source = payload.get("source") or {}
+        student = payload.get("student") or {}
+        return str(subject.get("semester") or source.get("semester") or student.get("semester") or "Current")
+
     def _subjects(self, payload=None):
         payload = payload or self._payload()
         return payload.get("attendance") or []
@@ -356,10 +361,38 @@ class ChatbotEngine:
             "- Subject code/name: details for one subject, like **MEMEC303**"
         )
 
-    def process_message(self, message):
+    def process_message(self, message, semester=None):
         message = (message or "").strip()
         message_lower = message.lower()
         payload = self._payload()
+
+        if semester and semester != 'all':
+            semester_str = str(semester)
+            # Filter attendance
+            filtered_attendance = []
+            for s in (payload.get("attendance") or []):
+                if self._subject_semester(s, payload) == semester_str:
+                    filtered_attendance.append(s)
+            payload["attendance"] = filtered_attendance
+            
+            # Recompute insights
+            old_insights = payload.get("insights") or {}
+            payload["insights"] = self._legacy_insights(filtered_attendance)
+            
+            # Filter recent absences and special events
+            allowed_codes = {s.get("code") for s in filtered_attendance if s.get("code")}
+            
+            if "recent_absences" in old_insights:
+                payload["insights"]["recent_absences"] = [
+                    item for item in old_insights["recent_absences"]
+                    if item.get("code") in allowed_codes
+                ]
+            if "special_events" in old_insights:
+                payload["insights"]["special_events"] = [
+                    item for item in old_insights["special_events"]
+                    if item.get("code") in allowed_codes
+                ]
+
         subjects = self._subjects(payload)
 
         if message_lower in {"codes", "help", "commands", "shortcuts"}:
